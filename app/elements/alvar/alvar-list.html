@@ -1,0 +1,46 @@
+<dom-module id="alvar-list">
+  <link rel="import" href="../../bower_components/polymer/polymer.html" />
+  <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html" />
+  <link rel="import" href="../../bower_components/iron-list/iron-list.html" />
+  <link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+  <style>
+    paper-material{
+      margin-bottom: 1rem;
+    }
+  </style>
+  <template>
+    <iron-ajax url="http://0.0.0.0:3000/api/Resources" last-response="{{data}}" auto></iron-ajax>
+    <iron-list items="[[data]]" as="item" style="height: 154500px;">
+      <div>
+        <template>
+          <paper-material elevation="1">
+            <h1>Teste</h1>
+            Name:
+            <span>[[item.name]]</span>
+
+          </paper-material>
+        </template>
+      </div>
+
+    </iron-list>
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+        is: 'alvar-list',
+        properties: {
+          data: {
+            type: Array,
+            notify: true,
+          }
+        },
+        ready: function() {
+          this.data = [];
+        }
+      });
+    })();
+
+  </script>
+
+</dom-module>

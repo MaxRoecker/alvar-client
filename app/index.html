@@ -111,7 +111,7 @@
             <section data-route="user-login">
               <paper-material elevation="1">
                 <h1 class="paper-font-title">Login</h1>
-                <form is="iron-form" id="resource-create-form">
+                <form is="iron-form" id="">
                   <paper-input type="text" label="Usuário" name="username"></paper-input>
                   <paper-input type="password" label="Senha" name="password"></paper-input>
                   <div class="form-actions">
@@ -130,25 +130,7 @@
             <section data-route="resource-create">
               <paper-material elevation="1">
                 <h1 class="paper-font-title">Adicionar um recurso</h1>
-                <form is="iron-form" id="resource-create-form">
-                  <paper-input label="Nome" name="name"></paper-input>
-                  <paper-textarea label="Descrição" name="description"></paper-textarea>
-                  <paper-input-container>
-                    <label>Teste</label>
-                    <input is="iron-input" id="teste" validator="validator-required" />
-                    <validator-required></validator-required>
-                  </paper-input-container>
-
-                  <div class="form-actions">
-                    <paper-button raised class="paper-button--primary" onclick="controllers.resource.create()">
-                      Salvar
-                    </paper-button>
-                    <paper-button>
-                      Cancelar
-                    </paper-button>
-                  </div>
-                </form>
-
+                <alvar-resource-create></alvar-resource-create>
               </paper-material>
             </section>
 

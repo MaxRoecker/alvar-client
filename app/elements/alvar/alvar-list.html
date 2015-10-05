@@ -2,7 +2,12 @@
   <link rel="import" href="../../bower_components/polymer/polymer.html" />
   <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html" />
   <link rel="import" href="../../bower_components/iron-list/iron-list.html" />
+  <link rel="import" href="../../bower_components/iron-icon/iron-icon.html" />
   <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+  <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+  <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+  <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
   <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
   <style>
     paper-material {
@@ -16,18 +21,25 @@
 
   </style>
   <template>
-    <iron-ajax url="http://0.0.0.0:3000/api/Resources" last-response="{{data}}" auto></iron-ajax>
-    <iron-list items="[[data]]" as="item" style="height: 256rem;">
-      <div>
+    <iron-ajax url="http://0.0.0.0:3000/api/Resources?filter[include]=archives" last-response="{{data}}"
+    auto></iron-ajax>
+    <paper-material elevation="1">
+      <iron-list items="[[data]]" as="item" style="height: 256rem;">
         <template>
-          <paper-material elevation="1">
-            <h1 class="paper-font-title">[[item.name]]</h1>
-            <p>[[item.description]]</p>
-          </paper-material>
-        </template>
-      </div>
+          <paper-item>
+            <paper-item-body two-line>
+              <div>[[item.name]]</div>
+              <div secondary>[[item.description]]</div>
+            </paper-item-body>
+            <a id="[[item.id]]" style="display: inline-block;" href="[[item.archives.value]]">
+              <paper-icon-button icon="file-download"></paper-icon-button>
+              <paper-tooltip>Download</paper-tooltip>
+            </a>
 
-    </iron-list>
+          </paper-item>
+        </template>
+      </iron-list>
+    </paper-material>
   </template>
 
   <script>

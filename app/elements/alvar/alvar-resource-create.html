@@ -63,7 +63,7 @@
       });
     })();
 
-    var access_token = "COhr1U7NxFY7tXrXZ8IumOjop5twEW3VgkEt7U9Bww3v9AnoPg12onFXIlhrDWJJ";
+    var access_token = "C6OED3R2Yq1vUHA49YPVI2hdExBnyRw2mVhzRr4ZbFICZIBzPqH9hCj7DcaxnOxt";
 
     var saveFile = function() {
       var resourceId = document.querySelector('#resource-id').getAttribute('value');
@@ -89,6 +89,7 @@
               function(){
                 console.log(this.responseText);
                 alert('Salvo!');
+                document.location.href="/";
               }
             );
             request.open(

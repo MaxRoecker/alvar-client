@@ -50,15 +50,11 @@
   <template is="dom-bind" id="app">
 
     <paper-drawer-panel id="paperDrawerPanel">
-      <!-- Drawer Scroll Header Panel -->
-      <paper-scroll-header-panel drawer fixed>
-
-        <!-- Drawer Toolbar -->
+      <!-- Drawer Area -->
+      <paper-header-panel drawer fixed>
         <paper-toolbar id="drawerToolbar">
-          <span class="paper-font-title">Menu</span>
+          <span class="paper-font-title">Alvar</span>
         </paper-toolbar>
-
-        <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
           <a data-route="home" href="/">
             <iron-icon icon="home"></iron-icon>
@@ -75,94 +71,63 @@
             <span>Contato</span>
           </a>
         </paper-menu>
-      </paper-scroll-header-panel>
+      </paper-header-panel>
 
       <!-- Main Area -->
-      <paper-scroll-header-panel main condenses keep-condensed-header>
+      <iron-pages attr-for-selected="data-route" selected="{{route}}" main>
+        <section data-route="home" class="page">
+          <paper-header-panel>
+            <paper-toolbar>
+              <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+              <h1 class="paper-font-title flex-1">Oi</h1>
+              <paper-icon-button icon="search"></paper-icon-button>
+              <paper-icon-button icon="refresh"></paper-icon-button>
+            </paper-toolbar>
 
-        <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar" class="tall">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-          <span class="flex"></span>
-
-          <!-- Toolbar icons -->
-          <paper-icon-button icon="refresh"></paper-icon-button>
-          <paper-icon-button icon="search"></paper-icon-button>
-
-          <!-- Application name -->
-          <div class="middle middle-container center horizontal layout">
-            <div class="app-name">Alvar</div>
-          </div>
-
-          <!-- Application sub title -->
-          <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead">Recursos médicos para a educação</div>
-          </div>
-
-        </paper-toolbar>
-
-        <!-- Main Content -->
-        <div class="content" >
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
-            <section data-route="home">
-              <alvar-list></alvar-list>
-            </section>
-
-            <section data-route="user-login">
-              <paper-material elevation="1">
-                <h1 class="paper-font-title">Login</h1>
-                <form is="iron-form" id="">
-                  <paper-input type="text" label="Usuário" name="username"></paper-input>
-                  <paper-input type="password" label="Senha" name="password"></paper-input>
-                  <div class="form-actions">
-                    <paper-button raised class="paper-button--primary" onclick="controllers.resourceCreate()">
-                      Login
-                    </paper-button>
-                  </div>
-                </form>
-                <script>
-
-
-                </script>
+            <div class="page__content">
+              <paper-material>
+                <h2 class="paper-font-title margin-0 margin-b-1">List</h2>
               </paper-material>
-            </section>
+            </div>
+          </paper-header-panel>
+        </section>
 
-            <section data-route="resource-create">
-              <paper-material elevation="1">
-                <h1 class="paper-font-title">Adicionar um recurso</h1>
-                <alvar-resource-create></alvar-resource-create>
-              </paper-material>
-            </section>
+        <section data-route="resource-create" class="page">
+          <resource-create-interface></resource-create-interface>
+        </section>
 
-            <section data-route="users">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Users</h2>
-                <p>This is the users section</p>
-                <a href="/users/Rob">Rob</a>
-              </paper-material>
-            </section>
 
-            <section data-route="user-info">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">
-                  User:
-                  <span>{{params.name}}</span>
-                </h2>
-                <div>This is
-                  <span>{{params.name}}</span>'s section</div>
-              </paper-material>
-            </section>
 
-            <section data-route="contact">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Contact</h2>
-                <p>This is the contact section</p>
-              </paper-material>
-            </section>
 
-          </iron-pages>
-        </div>
-      </paper-scroll-header-panel>
+        <section data-route="users">
+          <paper-material elevation="1">
+            <h2 class="paper-font-display2">Users</h2>
+            <p>This is the users section</p>
+            <a href="/users/Rob">Rob</a>
+          </paper-material>
+        </section>
+
+        <section data-route="user-info">
+          <paper-material elevation="1">
+            <h2 class="paper-font-display2">
+              User:
+              <span>{{params.name}}</span>
+            </h2>
+            <div>This is
+              <span>{{params.name}}</span>'s section</div>
+          </paper-material>
+        </section>
+
+        <section data-route="contact">
+          <paper-material elevation="1">
+            <h2 class="paper-font-display2">Contact</h2>
+            <p>This is the contact section</p>
+          </paper-material>
+        </section>
+
+      </iron-pages>
+
+
     </paper-drawer-panel>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->

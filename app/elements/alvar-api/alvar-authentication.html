@@ -1,0 +1,163 @@
+<dom-module is="alvar-authentication">
+  <link rel="import" href="../../../bower_components/polymer/polymer.html" />
+  <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html" />
+  <link rel="import" href="../../../bower_components/iron-localstorage/iron-localstorage.html" />
+  <link rel="import" href="../../../bower_components/iron-input/iron-input.html" />
+  <link rel="import" href="../../../bower_components/iron-form/iron-form.html" />
+  <link rel="import" href="../../../bower_components/paper-button/paper-button.html" />
+  <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html" />
+  <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html"
+  />
+  <link rel="import" href="../../../bower_components/paper-input/paper-input-container.html" />
+
+  <template>
+    <style>
+      #login-dialog {
+        --paper-dialog: {
+          background-color: #fff;
+          width: 50%;
+          height: auto;
+        }
+        ;
+      }
+
+      #login-dialog-scrollable {
+        height: 150px;
+      }
+
+    </style>
+
+    <iron-localstorage id="storage" name="alvar-authorization"></iron-localstorage>
+    <iron-ajax id="ajax" url="http://localhost:3000/api/Users/login" handle-as="json" content-type="application/json"
+    method="POST" on-response="_handleLoginResponse" on-error="_handleErrorResponse"></iron-ajax>
+    <paper-dialog id="login-dialog" modal>
+      <h2>Login</h2>
+      <paper-dialog-scrollable id="login-dialog-scrollable">
+        <form is="iron-form" id="form" method="post" action="/">
+          <paper-input-container>
+            <label>Email</label>
+            <input is="iron-input" id="form-email" type="email" name="email" required/>
+            <paper-input-error>Informe um e-mail válido</paper-input-error>
+          </paper-input-container>
+          <paper-input-container>
+            <label>Senha</label>
+            <input is="iron-input" id="form-password" type="password" name="password" required/>
+            <paper-input-error>Informe a senha</paper-input-error>
+          </paper-input-container>
+        </form>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button on-click="loginUser">Login</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'alvar-authentication',
+
+        properties: {
+          /**
+           * Describes the user's email to authorize.
+           */
+          userEmail: {
+            type: String,
+          },
+          /**
+           * Describes the user's password to authorize.
+           */
+          userPassword: {
+            type: String,
+          },
+          /**
+           * Describes the time in milliseconds to live of the authorization.
+           */
+          timeToLive: {
+            type: Number,
+            reflectToAttribute: true,
+          },
+
+          /**
+           * Describes the authorization of access (Access token) at Alvar API.
+           */
+          authorization: {
+            type: String,
+            readOnly: true,
+          },
+
+          /**
+           * Describes the date when the authorization was created.
+           */
+          createdAt: {
+            type: Date,
+            readOnly: true,
+          },
+
+          /**
+           * Describes the user id of the authorization.
+           */
+          userId: {
+            type: Number,
+            readOnly: true,
+          },
+        },
+
+        ready: function() {
+          this.authorize();
+        },
+
+        authorize: function() {
+          this.$.storage.reload();
+          var authorization = this.$.storage.value;
+          console.log('The authorization is: ', authorization);
+          if (authorization) {
+            this._setAuthorization(authorization.id);
+            this._setCreatedAt(authorization.created);
+            this._setUserId(authorization.userId);
+            this.timeToLive = authorization.ttl;
+          }
+          else if (this.userEmail && this.userPassword) {
+            this._requestLogin({
+              'email': this.userEmail,
+              'password': this.userPassword
+            });
+          }
+          else {
+            console.log('User is not logged in.');
+            this.$['login-dialog'].open();
+          }
+        },
+
+        loginUser: function() {
+          var validation = this.$['form-email'].validate() & this.$['form-password'].validate();
+          if (validation) {
+            var credentials = this.$['form'].serialize();
+            this._requestLogin(credentials);
+          }
+        },
+
+        _requestLogin: function(credentials) {
+          var ajax = this.$['ajax'];
+          ajax.body = credentials;
+          ajax.generateRequest();
+        },
+
+        _handleLoginResponse: function() {
+          var authorization = this.$['ajax'].lastResponse;
+          this.$.storage.value = authorization;
+          this._setAuthorization(authorization.id);
+          this._setCreatedAt(authorization.created);
+          this._setUserId(authorization.userId);
+          this.timeToLive = authorization.ttl;
+          this.$['login-dialog'].close();
+        },
+
+        _handleErrorResponse: function() {
+          console.log(this.$['ajax'].lastError);
+        }
+
+      });
+    })();
+
+  </script>
+</dom-module>

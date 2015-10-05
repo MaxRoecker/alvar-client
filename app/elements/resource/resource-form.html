@@ -1,0 +1,76 @@
+<dom-module id="resource-form">
+  <link rel="import" href="../../../bower_components/polymer/polymer.html" />
+  <link rel="import" href="../../../bower_components/iron-input/iron-input.html" />
+  <link rel="import" href="../../../bower_components/paper-input/paper-input-container.html" />
+  <link rel="import" href="../../../bower_components/paper-input/paper-input-char-counter.html" />
+  <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html" />
+  <link rel="import" href="../../../bower_components/input-file-base64/input-file-base64.html" />
+
+  <style>
+
+
+  </style>
+  <template>
+    <form>
+      <paper-input-container>
+        <label>Nome</label>
+        <input is="iron-input" type="text" bind-value="{{name}}" maxlength="64" />
+        <paper-input-char-counter></paper-input-char-counter>
+      </paper-input-container>
+      <paper-input-container always-float-label>
+        <label>Arquivo</label>
+        <input type="file" id="fileinput" on-change="parseFile" />
+      </paper-input-container>
+      <paper-textarea label="Descrição" value="{{description}}" maxlength="512" rows="1" char-counter></paper-textarea>
+    </form>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'resource-form',
+
+        properties: {
+          name: {
+            type: String,
+            notify: true,
+            value: ''
+          },
+          description: {
+            type: String,
+            notify: true,
+            value: ''
+          },
+          file: {
+            type: Object,
+            notify: true,
+            value: null
+          }
+        },
+
+        parseFile: function() {
+          var file = this.$.fileinput.files[0];
+          if (file) {
+            var host = this;
+            var reader = new FileReader();
+
+            reader.addEventListener('load', function(e) {
+              var result = {
+                'name': file.name,
+                'size': file.size,
+                'type': file.type,
+                'lastModified': file.lastModifiedDate.toISOString(),
+                'payload': e.target.result,
+              };
+              host.file = result;
+              console.log(result);
+            });
+
+            reader.readAsDataURL(file);
+          }
+        },
+
+      });
+    })();
+
+  </script>
+</dom-module>

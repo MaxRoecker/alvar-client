@@ -1,0 +1,77 @@
+<dom-module is="decs-search">
+  <link rel="import" href="../../../bower_components/polymer/polymer.html" />
+  <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html" />
+  <link rel="import" href="../../../bower_components/iron-input/iron-input.html" />
+  <link rel="import" href="../../../bower_components/paper-input/paper-input-container.html" />
+  <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html" />
+
+  <template>
+    <style>
+      :host{
+        display: block;
+      }
+      #row{
+        display: flex;
+        align-items: flex-end;
+      }
+      #input{
+        flex-grow: 11;
+      }
+      #search-button{
+        flex-grow: 1
+      }
+    </style>
+
+    <iron-ajax
+      id="decs-ajax"
+      url="http://decs.bvsalud.org/cgi-bin/mx/cgi=@vmx/decs/"
+      handle-as="text"
+      on-response="_handleDecsResponse"
+      ></iron-ajax>
+
+    <div id="row">
+      <div id="input">
+        <paper-input-container>
+          <label>Pesquisa</label>
+          <input is="iron-input" bind-value="{{search}}"/>
+        </paper-input-container>
+      </div>
+      <div id="search-button">
+        <paper-icon-button icon="search" on-click="_searchDecs"></paper-icon-button>
+      </div>
+    </div>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'decs-search',
+
+        properties: {
+          search: {
+            type: String,
+            reflectToAttribute: true,
+          },
+          result: {
+            type: Array,
+            reflectToAttribute: true,
+          }
+        },
+
+        _searchDecs: function(){
+          var params = {
+            "words" : this.search
+          };
+          var decsAjax = this.$['decs-ajax'];
+          decsAjax.params = params;
+          decsAjax.generateRequest();
+        },
+
+        _handleDecsResponse: function(){
+          var decsAjax = this.$['decs-ajax'];
+          console.log(decsAjax.lastResponse);
+        },
+      });
+    })();
+
+  </script>
+</dom-module>

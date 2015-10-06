@@ -4,7 +4,7 @@
   <link rel="import" href="../../../bower_components/paper-input/paper-input-container.html" />
   <link rel="import" href="../../../bower_components/paper-input/paper-input-char-counter.html" />
   <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html" />
-  <link rel="import" href="../../../bower_components/input-file-base64/input-file-base64.html" />
+  <link rel="import" href="../alvar-api/decs-search.html"/>
 
   <style>
 
@@ -22,6 +22,7 @@
         <input type="file" id="fileinput" on-change="parseFile" />
       </paper-input-container>
       <paper-textarea label="Descrição" value="{{description}}" maxlength="512" rows="1" char-counter></paper-textarea>
+      <decs-search></decs-search>
     </form>
   </template>
   <script>

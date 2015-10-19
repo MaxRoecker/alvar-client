@@ -76,27 +76,16 @@
       <!-- Main Area -->
       <iron-pages attr-for-selected="data-route" selected="{{route}}" main>
         <section data-route="home" class="page">
-          <paper-header-panel>
-            <paper-toolbar>
-              <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-              <h1 class="paper-font-title flex-1">Oi</h1>
-              <paper-icon-button icon="search"></paper-icon-button>
-              <paper-icon-button icon="refresh"></paper-icon-button>
-            </paper-toolbar>
-
-            <div class="page__content">
-              <paper-material>
-                <h2 class="paper-font-title margin-0 margin-b-1">List</h2>
-              </paper-material>
-            </div>
-          </paper-header-panel>
+          <resource-view-list id="resource-view-list"></resource-view-list>
         </section>
 
         <section data-route="resource-create" class="page">
-          <resource-create-interface></resource-create-interface>
+          <resource-create-interface id="resource-create-interface"></resource-create-interface>
         </section>
 
-
+        <section data-route="resource-info" class="page">
+          <resource-view resource-id="{{params.id}}"></resource-view>
+        </section>
 
 
         <section data-route="users">

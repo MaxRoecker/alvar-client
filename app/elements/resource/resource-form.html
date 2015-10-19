@@ -4,7 +4,7 @@
   <link rel="import" href="../../../bower_components/paper-input/paper-input-container.html" />
   <link rel="import" href="../../../bower_components/paper-input/paper-input-char-counter.html" />
   <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html" />
-  <link rel="import" href="../alvar-api/decs-search.html"/>
+  <link rel="import" href="../alvar-api/decs-search.html" />
 
   <style>
 
@@ -12,7 +12,7 @@
   </style>
   <template>
     <form>
-      <paper-input-container>
+      <paper-input-container always-float-label>
         <label>Nome</label>
         <input is="iron-input" type="text" bind-value="{{name}}" maxlength="64" />
         <paper-input-char-counter></paper-input-char-counter>
@@ -21,8 +21,8 @@
         <label>Arquivo</label>
         <input type="file" id="fileinput" on-change="parseFile" />
       </paper-input-container>
-      <paper-textarea label="Descrição" value="{{description}}" maxlength="512" rows="1" char-counter></paper-textarea>
-      <decs-search></decs-search>
+      <paper-textarea label="Descrição" value="{{description}}" maxlength="512" rows="1" always-float-label char-counter></paper-textarea>
+      <decs-search id="decs-search"></decs-search>
     </form>
   </template>
   <script>
@@ -45,7 +45,7 @@
             type: Object,
             notify: true,
             value: null
-          }
+          },
         },
 
         parseFile: function() {
@@ -69,6 +69,42 @@
             reader.readAsDataURL(file);
           }
         },
+
+        serializeResource: function() {
+          return JSON.parse(
+            JSON.stringify(
+              this._resourceFactory(this.name, this.description)
+            )
+          );
+        },
+
+        serializeArchive: function() {
+          return JSON.parse(
+            JSON.stringify(
+              this.file
+            )
+          );
+        },
+
+        serializeTags: function() {
+          return this.$['decs-search'].serialize();
+        },
+
+        reset: function(){
+          this.name = null;
+          this.description = null;
+          this.file = null;
+          var file = this.$.fileinput.value = null;
+          this.$['decs-search'].reset();
+        },
+
+        _resourceFactory: function(name, description) {
+          var resource = {
+            'name': name || '',
+            'description': description || ''
+          };
+          return resource;
+        }
 
       });
     })();

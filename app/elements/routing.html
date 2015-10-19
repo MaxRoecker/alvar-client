@@ -28,6 +28,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'resource-create';
     });
 
+    page('/resource/view/:id', function (data) {
+      app.route = 'resource-info';
+      app.params = data.params;
+    });
+
     page('/users', function () {
       app.route = 'users';
     });

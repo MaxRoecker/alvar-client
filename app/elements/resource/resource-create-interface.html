@@ -5,6 +5,7 @@
   <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
   <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html" />
   <link rel="import" href="../../../bower_components/paper-toolbar/paper-toolbar.html" />
+  <link rel="import" href="../../../bower_components/paper-spinner/paper-spinner.html" />
   <link rel="import" href="resource-form.html" />
   <link rel="import" href="../alvar-api/alvar-authentication.html" />
 
@@ -18,6 +19,7 @@
         background-color: #fff;
       }
 
+
     </style>
     <paper-header-panel>
       <paper-toolbar>
@@ -30,20 +32,30 @@
       <div>
         <paper-material elevation="1">
           <resource-form id="resource-form"></resource-form>
+          <div  style="text-align: center">
+            <paper-spinner id="spinner" hidden></paper-spinner>
+          </div>
         </paper-material>
       </div>
+
+
+
     </paper-header-panel>
 
     <iron-ajax id="ajax-resource" url="http://localhost:3000/api/Resources" method="POST" handle-as="json"
     content-type="application/json" on-response="_handleResourceResponse"></iron-ajax>
-    <iron-ajax id="ajax-archive" url="" method="POST" handle-as="json"
-    content-type="application/json" on-response="_handleArchiveResponse"></iron-ajax>
+    <iron-ajax id="ajax-archive" url="" method="POST" handle-as="json" content-type="application/json" on-response="_handleArchiveResponse"></iron-ajax>
+    <iron-ajax id="ajax-tag" url="" method="POST" handle-as="json" content-type="application/json" on-response="_handleTagsResponse"></iron-ajax>
     <alvar-authentication id="authentication"></alvar-authentication>
   </template>
   <script>
     (function() {
       Polymer({
         is: 'resource-create-interface',
+
+        properties: {
+          resource: Object,
+        },
 
         /**
          * Creates a resource.
@@ -54,16 +66,19 @@
           if (authorization) {
             //TODO Validate the form
             var resourceForm = this.$['resource-form'];
-            var resource = {
-              'name': resourceForm.name,
-              'description': resourceForm.description,
-            };
+            var resource = resourceForm.serializeResource();
             var ajax = this.$['ajax-resource'];
             ajax.headers = {
               'Authorization': authorization
             }
             ajax.body = resource;
             ajax.generateRequest();
+
+            this.toggleAttribute('hidden',true,resourceForm);
+            var spinner = this.$['spinner'];
+            this.toggleAttribute('hidden',false,spinner);
+            this.toggleAttribute('active',true,spinner);
+
           }
           else {
             //TODO show authorizaion modal
@@ -77,19 +92,54 @@
           var authorization = this.$['authentication'].authorization;
           var ajaxResource = this.$['ajax-resource'];
           var resource = ajaxResource.lastResponse;
+          this.resource = resource;
+          console.log('Recurso salvo!', resource);
+
           var ajaxArchive = this.$['ajax-archive'];
           ajaxArchive.headers = {
             'Authorization': authorization
-          }
-          ajaxArchive.url = 'http://localhost:3000/api/Resources/' + resource.id + '/archive';
-          ajaxArchive.body = this.$['resource-form'].file;
+          };
+
+          var archive = this.$['resource-form'].serializeArchive();
+          ajaxArchive.url = 'http://localhost:3000/api/Resources/' + resource.id +
+            '/archive';
+          ajaxArchive.body = archive;
           ajaxArchive.generateRequest();
         },
 
-        _handleArchiveResponse: function(){
+        _handleArchiveResponse: function() {
           var ajaxArchive = this.$['ajax-archive'];
           var archive = ajaxArchive.lastResponse;
-          console.log(archive);
+          console.log('Archive salvo!', archive);
+
+          var authorization = this.$['authentication'].authorization;
+          var ajaxTag = this.$['ajax-tag'];
+          ajaxTag.headers = {
+            'Authorization': authorization
+          };
+
+          var tags = this.$['resource-form'].serializeTags();
+          console.log(tags);
+          ajaxTag.url = 'http://localhost:3000/api/Resources/' + this.resource.id + '/tags';
+          ajaxTag.body = tags;
+          ajaxTag.generateRequest();
+        },
+
+        _handleTagsResponse: function() {
+          var ajaxTag = this.$['ajax-tag'];
+          var tags = ajaxTag.lastResponse;
+          console.log('Tags salvas', tags);
+          this.fire('resource-created',this.resource);
+
+          var spinner = this.$['spinner'];
+          this.toggleAttribute('hidden',true,spinner);
+          this.toggleAttribute('active',false,spinner);
+
+          var resourceForm = this.$['resource-form'];
+          resourceForm.reset();
+          this.toggleAttribute('hidden',false,resourceForm);
+
+
         },
 
         moreOptions: function() {

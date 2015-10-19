@@ -109,7 +109,6 @@
         authorize: function() {
           this.$.storage.reload();
           var authorization = this.$.storage.value;
-          console.log('The authorization is: ', authorization);
           if (authorization) {
             this._setAuthorization(authorization.id);
             this._setCreatedAt(authorization.created);

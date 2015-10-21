@@ -10,10 +10,14 @@
     "iron-form": "PolymerElements/iron-form#~1.0.7",
     "paper-input": "PolymerElements/paper-input#~1.0.8",
     "iron-list": "PolymerElements/iron-list#~1.0.2",
-    "paper-tooltip": "PolymerElements/paper-tooltip#~1.0.2"
+    "paper-tooltip": "PolymerElements/paper-tooltip#~1.0.2",
+    "star-rate": "*"
   },
   "devDependencies": {
     "web-component-tester": "*",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0"
+  },
+  "resolutions": {
+    "polymer": "^1.1.0"
   }
 }

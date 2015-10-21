@@ -1,12 +1,16 @@
 <dom-module is="resource-view">
   <link rel="import" href="../../../bower_components/polymer/polymer.html" />
+
   <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html" />
+
   <link rel="import" href="../../../bower_components/paper-styles/paper-styles-classes.html">
   <link rel="import" href="../../../bower_components/paper-header-panel/paper-header-panel.html" />
   <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
   <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html" />
   <link rel="import" href="../../../bower_components/paper-toolbar/paper-toolbar.html" />
   <link rel="import" href="../../../bower_components/paper-spinner/paper-spinner.html" />
+
+  <link rel="import" href="../star-rate/star-rate.html" />
 
   <template>
     <style>
@@ -35,7 +39,7 @@
           <span>Visualizar Recurso</span>
         </h1>
         <paper-icon-button icon="file-download" on-click="download"></paper-icon-button>
-        <paper-icon-button icon="star-border"></paper-icon-button>
+        <paper-icon-button icon="favorite-border"></paper-icon-button>
       </paper-toolbar>
 
       <div>
@@ -57,6 +61,11 @@
             <template is="dom-repeat" items="[[resource.tags]]">
               <span>[[item.name]]</span>
             </template>
+          </p>
+          <p class="paper-font-body2">
+            <span class="paper-font-body1 label">Classificação</span>
+            <br/>
+            <star-rate></star-rate>
           </p>
         </paper-material>
       </div>

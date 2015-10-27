@@ -48,7 +48,7 @@
 <body unresolved class="fullbleed layout vertical">
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
-
+    <alvar-login id="alvar-login"></alvar-login>
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Area -->
       <paper-header-panel drawer fixed>
@@ -75,6 +75,7 @@
 
       <!-- Main Area -->
       <iron-pages attr-for-selected="data-route" selected="{{route}}" main>
+
         <section data-route="home" class="page">
           <resource-view-list id="resource-view-list"></resource-view-list>
         </section>

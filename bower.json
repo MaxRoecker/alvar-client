@@ -11,7 +11,8 @@
     "paper-input": "PolymerElements/paper-input#~1.0.8",
     "iron-list": "PolymerElements/iron-list#~1.0.2",
     "paper-tooltip": "PolymerElements/paper-tooltip#~1.0.2",
-    "star-rate": "*"
+    "star-rate": "*",
+    "moment": "~2.10.6"
   },
   "devDependencies": {
     "web-component-tester": "*",

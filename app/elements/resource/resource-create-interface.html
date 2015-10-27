@@ -62,14 +62,14 @@
          *
          */
         createResource: function() {
-          var authorization = this.$['authentication'].authorization;
+          var authorization = this.$['authentication'].authorize();
           if (authorization) {
             //TODO Validate the form
             var resourceForm = this.$['resource-form'];
             var resource = resourceForm.serializeResource();
             var ajax = this.$['ajax-resource'];
             ajax.headers = {
-              'Authorization': authorization
+              'Authorization': authorization.id
             }
             ajax.body = resource;
             ajax.generateRequest();
@@ -81,7 +81,7 @@
 
           }
           else {
-            //TODO show authorizaion modal
+            this.fire('unauthorized');
           }
         },
 

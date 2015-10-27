@@ -28,10 +28,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
+    var login = document.querySelector('#alvar-login');
+    login.addEventListener('authorized',function(){
+      login.close();
+    });
+
     var resourceViewList = document.querySelector('#resource-view-list');
     resourceViewList.refresh();
 
     var resourceCreateInterface = document.querySelector('#resource-create-interface');
+    resourceCreateInterface.addEventListener('unauthorized',function(){
+      login.open();
+    });
+
     resourceCreateInterface.addEventListener('resource-created',function(event){
       page.redirect('/');
       resourceViewList.refresh();

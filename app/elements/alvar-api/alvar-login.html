@@ -34,6 +34,8 @@
     <iron-ajax id="ajax" url="http://localhost:3000/api/Users/login" handle-as="json" content-type="application/json"
     method="POST" on-response="_handleLoginResponse" on-error="_handleErrorResponse"></iron-ajax>
 
+    <iron-localstorage id="storage" name="alvar-authorization"></iron-localstorage>
+
     <paper-dialog id="login-dialog" modal>
       <h2>Login</h2>
       <paper-dialog-scrollable id="login-dialog-scrollable">

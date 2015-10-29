@@ -1,16 +1,17 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html" />
+
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html" />
+
+<link rel="import" href="../../../bower_components/paper-header-panel/paper-header-panel.html" />
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../../../bower_components/paper-toolbar/paper-toolbar.html" />
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html" />
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html" />
+<link rel="import" href="../../../bower_components/paper-item/paper-item-body.html" />
+
 <dom-module is="resource-view-list">
-  <link rel="import" href="../../../bower_components/polymer/polymer.html" />
-  <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html" />
-  <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html" />
-  <link rel="import" href="../../../bower_components/paper-header-panel/paper-header-panel.html" />
-  <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
-  <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html" />
-  <link rel="import" href="../../../bower_components/paper-toolbar/paper-toolbar.html" />
-  <link rel="import" href="../../../bower_components/paper-item/paper-item.html" />
-  <link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html" />
-  <link rel="import" href="../../../bower_components/paper-item/paper-item-body.html" />
-
-
   <template>
     <style>
       paper-material {
@@ -50,6 +51,10 @@
       </paper-toolbar>
 
       <div>
+        <template id="empty-set" is="dom-if" restamp="true">
+          Não há recursos cadastrados
+        </template>
+
         <paper-material elevation="1">
           <template is="dom-repeat" items="[[resources]]">
               <paper-item>
@@ -85,10 +90,14 @@
           resources: {
             type: Array,
             value: function() {
-              return [];
+              return [{}];
             }
           }
         },
+
+        observer: [
+          '_resourcesObserver(resources.*)'
+        ],
 
         /**
          * Creates a resource.
@@ -99,8 +108,13 @@
             'filter': JSON.stringify({
               "include": ["tags"]
             })
-          }
+          };
           this.$['ajax-resource'].generateRequest();
+        },
+
+        _resourcesObserver: function (changes) {
+          var msgIf = this.$['empty-set'];
+          msgIf.if = (this.resources.length)? true: false;
         },
 
         _handleResourceResponse: function() {
@@ -117,6 +131,10 @@
           e.srcElement.icon = 'favorite';
 
         },
+
+        _resourcesLenght: function () {
+          return this.resources.length;
+        }
 
       });
     })();

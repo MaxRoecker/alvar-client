@@ -42,10 +42,21 @@
 
     </paper-header-panel>
 
-    <iron-ajax id="ajax-resource" url="http://localhost:3000/api/Resources" method="POST" handle-as="json"
-    content-type="application/json" on-response="_handleResourceResponse"></iron-ajax>
-    <iron-ajax id="ajax-archive" url="" method="POST" handle-as="json" content-type="application/json" on-response="_handleArchiveResponse"></iron-ajax>
-    <iron-ajax id="ajax-tag" url="" method="POST" handle-as="json" content-type="application/json" on-response="_handleTagsResponse"></iron-ajax>
+    <iron-ajax id="ajax-resource"
+               url="http://localhost:3000/api/Resources"
+               method="POST" handle-as="json" content-type="application/json"
+               on-response="_handleResourceResponse"
+               on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax id="ajax-archive"
+               url=""
+               method="POST" handle-as="json" content-type="application/json"
+               on-response="_handleArchiveResponse"
+               on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax id="ajax-tag"
+               url=""
+               method="POST" handle-as="json" content-type="application/json"
+               on-response="_handleTagsResponse"
+               on-error="_handleAjaxError"></iron-ajax>
     <alvar-authentication id="authentication"></alvar-authentication>
   </template>
   <script>
@@ -64,21 +75,31 @@
         createResource: function() {
           var authorization = this.$['authentication'].authorize();
           if (authorization) {
-            //TODO Validate the form
             var resourceForm = this.$['resource-form'];
-            var resource = resourceForm.serializeResource();
-            var ajax = this.$['ajax-resource'];
-            ajax.headers = {
-              'Authorization': authorization.id
+            if(resourceForm.validate()){
+              var resource = resourceForm.serializeResource();
+              var ajax = this.$['ajax-resource'];
+              ajax.headers = {
+                'Authorization': authorization.id
+              }
+
+              var tags = this.$['resource-form'].serializeTags();
+              var tagstr = [];
+              for (var i = 0; i < tags.length; i++) {
+                tagstr.push(tags[i].name);
+                tagstr.push(tags[i].synonyms.join());
+              }
+              resource['tagsStringify'] = tagstr.join();
+
+              console.log(resource);
+              ajax.body = resource;
+              ajax.generateRequest();
+
+              this.toggleAttribute('hidden',true,resourceForm);
+              var spinner = this.$['spinner'];
+              this.toggleAttribute('hidden',false,spinner);
+              this.toggleAttribute('active',true,spinner);
             }
-            ajax.body = resource;
-            ajax.generateRequest();
-
-            this.toggleAttribute('hidden',true,resourceForm);
-            var spinner = this.$['spinner'];
-            this.toggleAttribute('hidden',false,spinner);
-            this.toggleAttribute('active',true,spinner);
-
           }
           else {
             this.fire('unauthorized');
@@ -86,10 +107,21 @@
         },
 
         /**
+         * Cancel the current state of
+         */
+        cancel: function () {
+          var spinner = this.$['spinner'];
+          this.toggleAttribute('hidden',true,spinner);
+          this.toggleAttribute('active',false,spinner);
+          var resourceForm = this.$['resource-form'];
+          this.toggleAttribute('hidden',false,resourceForm);
+        },
+
+        /**
          * Handler of response of Resource to Alvar API.
          */
         _handleResourceResponse: function() {
-          var authorization = this.$['authentication'].authorization;
+          var authorization = this.$['authentication'].authorize();
           var ajaxResource = this.$['ajax-resource'];
           var resource = ajaxResource.lastResponse;
           this.resource = resource;
@@ -97,7 +129,7 @@
 
           var ajaxArchive = this.$['ajax-archive'];
           ajaxArchive.headers = {
-            'Authorization': authorization
+            'Authorization': authorization.id
           };
 
           var archive = this.$['resource-form'].serializeArchive();
@@ -112,10 +144,10 @@
           var archive = ajaxArchive.lastResponse;
           console.log('Archive salvo!', archive);
 
-          var authorization = this.$['authentication'].authorization;
+          var authorization = this.$['authentication'].authorize();
           var ajaxTag = this.$['ajax-tag'];
           ajaxTag.headers = {
-            'Authorization': authorization
+            'Authorization': authorization.id
           };
 
           var tags = this.$['resource-form'].serializeTags();
@@ -140,6 +172,15 @@
           this.toggleAttribute('hidden',false,resourceForm);
 
 
+        },
+
+        _handleAjaxError: function (event) {
+          var status = event.srcElement.lastError.request.status;
+          console.log(status);
+          if(status == 401){
+            this.fire('unauthorized');
+          };
+          this.cancel();
         },
 
         moreOptions: function() {

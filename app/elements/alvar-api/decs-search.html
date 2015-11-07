@@ -1,16 +1,16 @@
-<dom-module is="decs-search">
-  <link rel="import" href="../../../bower_components/polymer/polymer.html" />
-  <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html" />
-  <link rel="import" href="../../../bower_components/iron-input/iron-input.html" />
-  <link rel="import" href="../../../bower_components/paper-input/paper-input-container.html" />
-  <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html" />
-  <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html" />
-  <link rel="import" href="../../../bower_components/paper-checkbox/paper-checkbox.html" />
-  <link rel="import" href="../../../bower_components/paper-item/paper-item.html" />
-  <link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html" />
-  <link rel="import" href="../../../bower_components/paper-item/paper-item-body.html" />
-  <link rel="import" href="../../../bower_components/paper-spinner/paper-spinner.html" />
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="../../bower_components/iron-input/iron-input.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-input-container.html" />
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html" />
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html" />
+<link rel="import" href="../../bower_components/paper-item/paper-item.html" />
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html" />
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html" />
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html" />
 
+<dom-module id="decs-search">
   <template>
     <style>
       :host {
@@ -143,7 +143,7 @@
 
         _searchDecs: function() {
           var params = {
-            "search": this.search
+            'search': this.search
           };
           var decsAjax = this.$['decs-ajax'];
           decsAjax.params = params;
@@ -170,11 +170,11 @@
 
             var sameTermSelected = this.selecteds.filter(
               function(e) {
-                return e.terms.pt == tag.terms.pt;
+                return e.terms.pt === tag.terms.pt;
               }
             );
 
-            if (sameTermSelected.length == 0) {
+            if (sameTermSelected.length === 0) {
               this.push('selecteds', tag);
             }
           }

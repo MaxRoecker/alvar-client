@@ -1,8 +1,7 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
 <dom-module is="star-rate">
-  <link rel="import" href="../../../bower_components/polymer/polymer.html" />
-  <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
-
-
   <template>
     <template id="stars-filled" is="dom-repeat">
       <iron-icon icon="star" index="[[item]]" on-click="_rate"></iron-icon>
@@ -45,7 +44,7 @@
 
         _setStarsFilled: function(value){
           var array = new Array(value);
-          for(var i = 1;i <= value; array[i-1] = i++);
+          for(var i = 1;i <= value; array[i-1] = i++){;};
           this.$['stars-filled'].items = array;
         },
 

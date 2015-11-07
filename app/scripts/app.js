@@ -16,7 +16,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   app.displayInstalledToast = function() {
-    document.querySelector('#caching-complete').show();
+    // Check to make sure caching is actually enabled—it won't be in the dev environment.
+    if (!document.querySelector('platinum-sw-cache').disabled) {
+      document.querySelector('#caching-complete').show();
+    }
   };
 
   // Listen for template bound event to know when bindings
@@ -28,24 +31,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
-    var login = document.querySelector('#alvar-login');
+
+    var login = document.querySelector('alvar-login');
     login.addEventListener('authorized',function(){
       login.close();
     });
 
-    var resourceViewList = document.querySelector('#resource-view-list');
+    var resourceViewList = document.querySelector('resource-view-list');
     resourceViewList.refresh();
 
-    var resourceCreateInterface = document.querySelector('#resource-create-interface');
+    var resourceCreateInterface = document.querySelector('resource-create-interface');
     resourceCreateInterface.addEventListener('unauthorized',function(){
       login.open();
     });
 
-    resourceCreateInterface.addEventListener('resource-created',function(event){
+    resourceCreateInterface.addEventListener('resource-created',function(){
       page.redirect('/');
       resourceViewList.refresh();
     });
-
 
   });
 
@@ -55,6 +58,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (drawerPanel.narrow) {
       drawerPanel.closeDrawer();
     }
+  };
+
+  // Scroll page to top and expand header
+  app.scrollPageToTop = function() {
+    document.getElementById('mainContainer').scrollTop = 0;
   };
 
 })(document);

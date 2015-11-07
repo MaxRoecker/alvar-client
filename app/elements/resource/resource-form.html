@@ -1,11 +1,10 @@
-<link rel="import" href="../../../bower_components/polymer/polymer.html" />
-<link rel="import" href="../../../bower_components/iron-input/iron-input.html" />
-<link rel="import" href="../../../bower_components/paper-input/paper-input-container.html" />
-<link rel="import" href="../../../bower_components/paper-input/paper-input-error.html" />
-<link rel="import" href="../../../bower_components/paper-input/paper-input-char-counter.html" />
-<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html" />
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/iron-input/iron-input.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-input-container.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-input-error.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-input-char-counter.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html" />
 <link rel="import" href="../alvar-api/decs-search.html" />
-
 
 <dom-module id="resource-form">
 
@@ -109,7 +108,7 @@
           this.name = null;
           this.description = null;
           this.file = null;
-          var file = this.$.fileinput.value = null;
+          this.$.fileinput.value = null;
           this.$['decs-search'].reset();
         },
 

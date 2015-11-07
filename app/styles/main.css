@@ -7,40 +7,8 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-:root {
-  --dark-primary-color: #303F9F;
-  --default-primary-color: #3F51B5;
-  --light-primary-color: #C5CAE9;
-  --text-primary-color: #ffffff; /*text/icons*/
-  --accent-color: #FF4081;
-  --primary-background-color: #c5cae9;
-  --primary-text-color: #212121;
-  --secondary-text-color: #727272;
-  --disabled-text-color: #bdbdbd;
-  --divider-color: #B6B6B6;
-
-  /* Components */
-
-  /* paper-drawer-panel */
-  --drawer-menu-color: #ffffff;
-  --drawer-border-color: 1px solid #ccc;
-  --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
-
-  /* paper-menu */
-  --paper-menu-background-color: #fff;
-  --menu-link-color: #111111;
-}
-
 body {
   background: #fafafa;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
-}
-
-.paper-button--primary{
-  background-color: #3F51B5;
-  color: #fff;
-}
-.form-actions{
-  margin-top: 1rem;
 }

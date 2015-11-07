@@ -1,8 +1,8 @@
-<link rel="import" href="../../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
 
-<link rel="import" href="../../../bower_components/iron-localstorage/iron-localstorage.html" />
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html" />
 
-<dom-module is="alvar-authentication">
+<dom-module id="alvar-authentication">
   <template>
     <style>
       :host {
@@ -14,8 +14,9 @@
     <iron-localstorage id="storage" name="alvar-authorization"></iron-localstorage>
 
   </template>
-  <script src="../../../bower_components/moment/min/moment.min.js" charset="utf-8"></script>
+  <script src="../../bower_components/moment/min/moment.min.js" charset="utf-8"></script>
   <script>
+    var moment = moment;
     (function() {
       Polymer({
         is: 'alvar-authentication',

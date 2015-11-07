@@ -1,13 +1,16 @@
-<dom-module is="resource-create-interface">
-  <link rel="import" href="../../../bower_components/polymer/polymer.html" />
-  <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html" />
-  <link rel="import" href="../../../bower_components/paper-header-panel/paper-header-panel.html" />
-  <link rel="import" href="../../../bower_components/paper-material/paper-material.html" />
-  <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html" />
-  <link rel="import" href="../../../bower_components/paper-toolbar/paper-toolbar.html" />
-  <link rel="import" href="../../../bower_components/paper-spinner/paper-spinner.html" />
-  <link rel="import" href="resource-form.html" />
-  <link rel="import" href="../alvar-api/alvar-authentication.html" />
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html" />
+<link rel="import" href="../../bower_components/paper-material/paper-material.html" />
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html" />
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html" />
+<link rel="import" href="resource-form.html" />
+<link rel="import" href="../alvar-api/alvar-authentication.html" />
+
+
+
+<dom-module id="resource-create-interface">
 
   <template>
     <style>
@@ -32,7 +35,7 @@
       <div>
         <paper-material elevation="1">
           <resource-form id="resource-form"></resource-form>
-          <div  style="text-align: center">
+          <div style="text-align: center">
             <paper-spinner id="spinner" hidden></paper-spinner>
           </div>
         </paper-material>
@@ -73,6 +76,7 @@
          *
          */
         createResource: function() {
+          console.log('Oi');
           var authorization = this.$['authentication'].authorize();
           if (authorization) {
             var resourceForm = this.$['resource-form'];
@@ -81,7 +85,7 @@
               var ajax = this.$['ajax-resource'];
               ajax.headers = {
                 'Authorization': authorization.id
-              }
+              };
 
               var tags = this.$['resource-form'].serializeTags();
               var tagstr = [];
@@ -177,9 +181,9 @@
         _handleAjaxError: function (event) {
           var status = event.srcElement.lastError.request.status;
           console.log(status);
-          if(status == 401){
+          if(status === 401){
             this.fire('unauthorized');
-          };
+          }
           this.cancel();
         },
 

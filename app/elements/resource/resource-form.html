@@ -18,13 +18,13 @@
       <paper-input-container always-float-label>
         <label>Nome</label>
         <input id="resource-form-input-name" is="iron-input" type="text" bind-value="{{name}}" required maxlength="64" />
-        <paper-input-error>Infore um nome</paper-input-error>
+        <paper-input-error>Informe um nome</paper-input-error>
         <paper-input-char-counter></paper-input-char-counter>
       </paper-input-container>
       <paper-input-container always-float-label>
         <label>Arquivo</label>
         <input is="iron-input" type="file" id="fileinput" on-change="parseFile" required />
-        <paper-input-error>Infore um arquivo</paper-input-error>
+        <paper-input-error>Informe um arquivo</paper-input-error>
       </paper-input-container>
       <paper-textarea label="Descrição" value="{{description}}" maxlength="512" rows="1" always-float-label char-counter></paper-textarea>
       <decs-search id="decs-search"></decs-search>

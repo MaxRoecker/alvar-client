@@ -55,8 +55,27 @@
         <paper-toolbar id="drawerToolbar">
           <span class="paper-font-title">Alvar</span>
         </paper-toolbar>
-        <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="home" href="/">
+        <paper-menu class="list"
+                    attr-for-selected="data-route"
+                    selected="{{route}}"
+                    on-iron-select="onMenuSelect">
+
+        <a data-route="home" href="/">
+          <paper-icon-item>
+            <iron-icon icon="home" item-icon></iron-icon>
+            Página inicial
+          </paper-icon-item>
+        </a>
+
+        <a data-route="resource-create" href="/resource/create">
+          <paper-icon-item data-route="resource-create">
+            <iron-icon icon="add" item-icon></iron-icon>
+              Adicionar novo
+          </paper-icon-item>
+        </a>
+
+
+          <!--<a data-route="home" href="/">
             <iron-icon icon="home"></iron-icon>
             <span>Página inicial</span>
           </a>
@@ -66,7 +85,7 @@
             <span>Adicionar novo</span>
           </a>
 
-          <!--<a data-route="contact" href="/contact">
+          <a data-route="contact" href="/contact">
             <iron-icon icon="mail"></iron-icon>
             <span>Contato</span>
           </a>-->

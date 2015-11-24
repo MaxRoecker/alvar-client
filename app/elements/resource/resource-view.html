@@ -30,7 +30,6 @@
         display: block;
         margin: 5rem auto;
       }
-
     </style>
     <paper-header-panel>
       <paper-toolbar>
@@ -85,8 +84,8 @@
       </div>
     </paper-header-panel>
 
-    <iron-ajax id='ajax-resource' method='GET' handle-as='json' content-type='application/json' on-response='_handleResourceResponse'
-    on-error='_handleResourceError'></iron-ajax>
+    <iron-ajax id='ajax-resource' method='GET' handle-as='json' content-type='application/json' on-response='_handleResourceResponse' on-error='_handleResourceError'></iron-ajax>
+    <iron-ajax id='ajax-archive' method='GET' handle-as='json' content-type='application/json' on-response='_handleArchiveResponse' on-error='_handleArchiveError'></iron-ajax>
 
   </template>
   <script>
@@ -101,14 +100,12 @@
       if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define([], factory);
-      }
-      else if (typeof exports === 'object') {
+      } else if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
         module.exports = factory();
-      }
-      else {
+      } else {
         // Browser globals (root is window)
         root.download = factory();
       }
@@ -137,9 +134,6 @@
           m = x[0];
           x = x[1];
         }
-
-
-
 
         //go ahead and download dataURLs right away
         if (String(x).match(/^data\:[\w+\-]+\/[\w+\-]+[,;]/)) {
@@ -227,14 +221,12 @@
 
         if (self.URL) { // simple fast and modern way using Blob and URL:
           saver(self.URL.createObjectURL(blob), true);
-        }
-        else {
+        } else {
           // handle non-Blob()+non-URL browsers:
           if (typeof blob === 'string' || blob.constructor === z) {
             try {
               return saver('data:' + m + ';base64,' + self.btoa(blob));
-            }
-            catch (y) {
+            } catch (y) {
               return saver('data:' + m + ',' + encodeURIComponent(blob));
             }
           }
@@ -278,7 +270,12 @@
           ajaxResource.url = 'http://isingular.com.br:3000/api/Resources/' + newValue;
           ajaxResource.params = {
             'filter': JSON.stringify({
-              'include': ['tags', 'archive']
+              'include': ['tags', {
+                'relation': 'archive',
+                'scope': {
+                  'fields': ['name', 'size', 'type','id']
+                }
+              }]
             })
           };
           ajaxResource.generateRequest();
@@ -300,6 +297,7 @@
           var resource = ajaxResource.lastResponse;
           resource.archive.size = this._readableSize(resource.archive.size);
           this.resource = resource;
+          console.log(resource);
           var spinner = this.$['spinner'];
           spinner.active = false;
           this.toggleAttribute('hidden', true, spinner);
@@ -311,11 +309,30 @@
           //TODO Check error
         },
 
+        _handleArchiveResponse: function() {
+          var ajaxArchive = this.$['ajax-archive'];
+          var archive = ajaxArchive.lastResponse;
+          var b64Data = archive.payload.split(',')[1];
+          var blob = this._b64toBlob(b64Data, archive.type);
+          //var blobUrl = URL.createObjectURL(blob);
+          download(blob, this.resource.name, archive.type);
+        },
+
+        _handleArchiveError: function() {
+          //TODO Check error
+        },
+
         download: function() {
+          var ajaxArchive = this.$['ajax-archive'];
+          ajaxArchive.url = 'http://isingular.com.br:3000/api/Archives/' + this.resource.archive.id;
+
+          ajaxArchive.generateRequest();
+          /*
           var b64Data = this.resource.archive.payload.split(',')[1];
           var blob = this._b64toBlob(b64Data, this.resource.archive.type);
           //var blobUrl = URL.createObjectURL(blob);
           download(blob, this.resource.name, this.resource.archive.type);
+          */
         },
 
         _b64toBlob: function(b64Data, contentType, sliceSize) {
@@ -343,6 +360,5 @@
 
       });
     })();
-
   </script>
 </dom-module>

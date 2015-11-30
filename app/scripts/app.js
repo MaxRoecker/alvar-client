@@ -33,22 +33,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // imports are loaded and elements have been registered
 
     var login = document.querySelector('alvar-login');
+    var resourceView = document.querySelector('resource-view');
+    var resourceViewList = document.querySelector('resource-view-list');
+    var resourceCreateInterface = document.querySelector('resource-create-interface');
+    var drawerPanel = document.querySelector('#paperDrawerPanel');
+
+    var menuHandler =  function(event){
+      if (drawerPanel.narrow) {
+        drawerPanel.openDrawer();
+      }
+    };
+
     login.addEventListener('authorized',function(){
       login.close();
     });
 
-    var resourceViewList = document.querySelector('resource-view-list');
     resourceViewList.refresh();
+    resourceViewList.addEventListener('menu',menuHandler);
 
-    var resourceCreateInterface = document.querySelector('resource-create-interface');
+    resourceView.addEventListener('menu',menuHandler);
+
     resourceCreateInterface.addEventListener('unauthorized',function(){
       login.open();
     });
-
+    
     resourceCreateInterface.addEventListener('resource-created',function(){
       page.redirect('/');
       resourceViewList.refresh();
     });
+
+    resourceCreateInterface.addEventListener('menu',menuHandler);
 
   });
 

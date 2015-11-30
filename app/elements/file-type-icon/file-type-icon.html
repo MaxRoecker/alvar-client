@@ -1,20 +1,31 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
+
 <dom-module id="file-type-icon">
   <template>
     <style>
       :host {
         display: block;
       }
+
     </style>
+
+    <iron-icon icon="filetypes:[[type]]" item-icon></iron-icon>
 
   </template>
   <script>
     Polymer({
       is: 'file-type-icon',
       properties: {
-        'type':{
+        'type': {
           type: String,
+          value: "file",
         }
-      }
+      },
+
+
+
     });
+
   </script>
 </dom-module>

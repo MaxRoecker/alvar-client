@@ -26,7 +26,7 @@
     </style>
     <paper-header-panel>
       <paper-toolbar>
-        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+        <paper-icon-button icon="menu" on-click="_fireMenu" paper-drawer-toggle></paper-icon-button>
         <h1 class="paper-font-title flex-1">Adicionar recurso</h1>
         <paper-icon-button icon="done" on-click="createResource"></paper-icon-button>
         <paper-icon-button icon="more-vert" on-click="moreOptions"></paper-icon-button>
@@ -76,7 +76,6 @@
          *
          */
         createResource: function() {
-          console.log('Oi');
           var authorization = this.$['authentication'].authorize();
           if (authorization) {
             var resourceForm = this.$['resource-form'];
@@ -185,6 +184,10 @@
             this.fire('unauthorized');
           }
           this.cancel();
+        },
+
+        _fireMenu: function () {
+          this.fire('menu');
         },
 
         moreOptions: function() {

@@ -4,11 +4,9 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input-container.html" />
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html" />
-<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html" />
-<link rel="import" href="../../bower_components/paper-item/paper-item.html" />
-<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html" />
-<link rel="import" href="../../bower_components/paper-item/paper-item-body.html" />
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html" />
+
+<link rel="import" href="decs-search-item.html" />
 
 <dom-module id="decs-search">
   <template>
@@ -69,22 +67,6 @@
 
     <iron-ajax id="decs-ajax" method="get" url="http://isingular.com.br:3000/api/Resources/searchDecs" handle-as="json"
     on-response="_handleDecsResponse"></iron-ajax>
-    <div>
-      <template is="dom-repeat" items="[[selecteds]]">
-        <paper-icon-item class="tags">
-          <paper-icon-button icon="delete" index="[[index]]" item-icon on-click="removeSelected"></paper-icon-button>
-          <paper-item-body two-line>
-            <div>[[item.terms.pt]]</div>
-            <div secondary>
-              Sinônimos:
-              <template is="dom-repeat" items="[[item.synonyms]]" as="synonym">
-                <span>[[synonym]]</span>,
-              </template>
-            </div>
-          </paper-item-body>
-        </paper-icon-item>
-      </template>
-    </div>
     <div class="row">
       <div id="input">
         <paper-input-container always-float-label>
@@ -96,25 +78,25 @@
         <paper-icon-button class="no-rotate" id="search-button" icon="search" on-click="_searchDecs"></paper-icon-button>
       </div>
     </div>
+
     <div>
-      <paper-menu id="decs-result" attr-for-selected="name" on-selected-item-changed="_selectedChangedHandler">
-        <template is="dom-repeat" items="[[results]]">
-          <paper-icon-item name="[[item.terms.pt]]" index="[[index]]">
-            <paper-icon-button icon="add" index="[[index]]" item-icon></paper-icon-button>
-            <paper-item-body two-line>
-              <div>[[item.terms.pt]]</div>
-              <div secondary>
-                Sinônimos:
-                <template is="dom-repeat" items="[[item.synonyms]]" as="synonym">
-                  <span>[[synonym]]</span>,
-                </template>
-              </div>
-            </paper-item-body>
-          </paper-icon-item>
-        </template>
-      </paper-menu>
-      <paper-spinner id="spinner"></paper-spinner>
+      <template is="dom-repeat" items="[[selecteds]]">
+        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]"
+                          selected
+                          on-firstaction="_firstActionHandler"
+                          on-secondaction="_selectedSecondActionHandler"></decs-search-item>
+      </template>
     </div>
+
+    <div>
+      <template is="dom-repeat" items="[[results]]">
+        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]"
+                          on-firstaction="_firstActionHandler"
+                          on-secondaction="_resultSecondActionHandler"></decs-search-item>
+      </template>
+    </div>
+    <paper-spinner id="spinner"></paper-spinner>
+
 
   </template>
   <script>
@@ -141,6 +123,25 @@
           }
         },
 
+        _firstActionHandler: function (event) {
+          if(event.target.opened){
+            event.target.close();
+          }else{
+            event.target.open();
+          }
+        },
+
+        _resultSecondActionHandler: function (event) {
+          var index = event.model.index;
+          var selectedTag = this.splice('results',index,1);
+          this.push('selecteds',selectedTag[0]);
+        },
+
+        _selectedSecondActionHandler: function(event){
+          var index = event.model.index;
+          var selectedTag = this.splice('selecteds',index,1);
+        },
+
         _searchDecs: function() {
           var params = {
             'search': this.search
@@ -156,32 +157,9 @@
         _handleDecsResponse: function() {
           var decsAjax = this.$['decs-ajax'];
           var results = decsAjax.lastResponse.result;
-          this.$['decs-result'].selected = undefined;
           this._setResults(results);
           var searchButton = this.$['spinner'];
           searchButton.active = false;
-        },
-
-        _selectedChangedHandler: function() {
-          var element = this.$['decs-result'].selectedItem;
-          if (element) {
-            var index = element.index;
-            var tag = this.splice('results', index, 1)[0];
-
-            var sameTermSelected = this.selecteds.filter(
-              function(e) {
-                return e.terms.pt === tag.terms.pt;
-              }
-            );
-
-            if (sameTermSelected.length === 0) {
-              this.push('selecteds', tag);
-            }
-          }
-        },
-
-        removeSelected: function(e) {
-          this.splice('selecteds', e.path[1].index, 1);
         },
 
         serialize: function() {

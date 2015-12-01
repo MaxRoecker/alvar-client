@@ -9,7 +9,9 @@
 <link rel='import' href='../../bower_components/paper-toolbar/paper-toolbar.html' />
 <link rel='import' href='../../bower_components/paper-spinner/paper-spinner.html' />
 
-<link rel='import' href='../star-rate/star-rate.html' />
+<link rel="import" href="../file-type-icon/file-type-icon.html" />
+
+<!-- <link rel='import' href='../star-rate/star-rate.html' /> -->
 
 <dom-module id='resource-view'>
   <template>
@@ -59,6 +61,7 @@
           <p class='paper-font-body2'>
             <span class='paper-font-body1 label'>Tipo</span>
             <br/>
+            <file-type-icon type="[[resource.archive.type]]"></file-type-icon>
             <span>[[resource.archive.type]]</span>
           </p>
           <p class='paper-font-body2'>
@@ -296,7 +299,6 @@
           var resource = ajaxResource.lastResponse;
           resource.archive.size = this._readableSize(resource.archive.size);
           this.resource = resource;
-          console.log(resource);
           var spinner = this.$['spinner'];
           spinner.active = false;
           this.toggleAttribute('hidden', true, spinner);

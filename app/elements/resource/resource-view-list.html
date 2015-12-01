@@ -44,7 +44,7 @@
         align-items: center;
       }
 
-      paper-icon-item a {
+      a {
         width: calc(100% - 2.5rem);
         display: block;
         color: inherit;
@@ -79,7 +79,7 @@
           <template is="dom-repeat" items="[[resources]]">
             <a href="[[_hrefItem(item)]]">
               <paper-icon-item>
-                <paper-icon-button icon="filetypes:file" item-icon></paper-icon-button>
+                <file-type-icon type="[[item.archive.type]]" item-icon></file-type-icon>
                 <paper-item-body two-line>
                   <div>[[item.name]]</div>
                   <div secondary>[[_formatTags(item.tags)]]</div>
@@ -125,7 +125,12 @@
           var ajax = this.$['ajax-resource'];
 
           var filter = JSON.stringify({
-            'include': ['tags'],
+            'include': ['tags', {
+              'relation': 'archive',
+              'scope': {
+                'fields': ['type']
+              }
+            }],
           });
 
           ajax.params = {
@@ -138,7 +143,12 @@
         search: function() {
           var ajax = this.$['ajax-resource'];
           var filter = JSON.stringify({
-            'include': ['tags'],
+            'include': ['tags', {
+              'relation': 'archive',
+              'scope': {
+                'fields': ['type']
+              }
+            }],
             'where': {
               'or': [{
                 'name': {

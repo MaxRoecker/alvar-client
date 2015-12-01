@@ -1,16 +1,29 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
 
 <dom-module id="file-type-icon">
   <template>
     <style>
       :host {
-        display: block;
+        display: inline-block;
+        --iron-icon-fill-color: #FFFFFF;
+      }
+
+      #avatar {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #777;
+        border-radius: 50%;
       }
 
     </style>
 
-    <iron-icon icon="filetypes:[[type]]" item-icon></iron-icon>
+    <div id="avatar">
+      <iron-icon icon="filetypes:[[_mapTypeToIcon(type)]]"></iron-icon>
+    </div>
 
   </template>
   <script>
@@ -20,7 +33,56 @@
         'type': {
           type: String,
           value: "file",
+          observer: '_typeObserver'
         }
+      },
+
+      _mapTypeToIcon: function(type){
+        var icons = {
+          'word':['word'],
+          'excel': ['excel','spreadsheet'],
+          'powerpoint': ['powerpoint','presentation'],
+          'pdf': ['pdf'],
+          'text':['text'],
+          'image': ['image'],
+          'video': ['video','mpeg'],
+          'audio': ['audio'],
+          'zip': ['zip','compress'],
+        };
+
+        for (var icon in icons) {
+          if (icons.hasOwnProperty(icon)) {
+            var filtered = icons[icon].filter(function(item){
+              return type.indexOf(item) > -1;
+            });
+            if(filtered.length > 0){
+              return icon;
+            }
+          }
+        }
+
+        return 'file';
+      },
+
+      _mapIconToColor: function(icon){
+        var icons = {
+          'word': '#673AB7',
+          'excel': '#4CAF50',
+          'powerpoint': '#FF5722',
+          'pdf': '#F44336',
+          'text': '#2196F3',
+          'image': '#FFC107',
+          'video': '#9C27B0',
+          'audio': '#009688',
+          'zip': '#607D8B',
+          'file': '#9E9E9E',
+        };
+        return icons[icon];
+      },
+
+      _typeObserver: function (newValue) {
+        this.$['avatar'].style['background-color'] = this._mapIconToColor(this._mapTypeToIcon(newValue));
+        this.updateStyles();
       },
 
 

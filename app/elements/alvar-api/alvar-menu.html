@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+
+<dom-module id="alvar-menu">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --paper-menu-selected-item: {
+          color: var(--default-primary-color);
+        }
+      }
+
+      paper-menu a{
+        color: var(--secondary-text-color);
+        text-decoration: none;
+      }
+    </style>
+
+
+    <paper-menu id="menu" selected="{{selected}}" attr-for-selected="data-route" on-iron-select="_ironSelectHandler">
+      <a data-route="home" href="/">
+        <paper-icon-item>
+          <iron-icon icon="home" item-icon></iron-icon>
+          Página inicial
+        </paper-icon-item>
+      </a>
+
+      <a data-route="resource-create" href="/resource/create">
+        <paper-icon-item data-route="resource-create">
+          <iron-icon icon="add" item-icon></iron-icon>
+            Adicionar novo
+        </paper-icon-item>
+      </a>
+    </paper-menu>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'alvar-menu',
+
+      properties: {
+        selected: {
+          type: String,
+          value: 'home'
+        },
+        isAuthenticat: {
+          type: Boolean,
+          value: false,
+        }
+      },
+
+      _ironSelectHandler: function(){
+        this.fire('menu-select');
+      },
+
+    });
+  </script>
+</dom-module>

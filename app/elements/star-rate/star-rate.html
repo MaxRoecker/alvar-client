@@ -44,14 +44,14 @@
 
         _setStarsFilled: function(value){
           var array = new Array(value);
-          for(var i = 1;i <= value; array[i-1] = i++){;};
+          for(var i = 1;i <= value; array[i-1] = i++){}
           this.$['stars-filled'].items = array;
         },
 
         _setStarsBordered: function(value){
           var array = new Array(value);
           var index = this.rating+1;
-          for(var i = 0; i < array.length; array[i++] = index++);
+          for(var i = 0; i < array.length; array[i++] = index++){}
           this.$['stars-bordered'].items = array;
         },
 

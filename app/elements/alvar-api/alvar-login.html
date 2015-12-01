@@ -17,16 +17,14 @@
       #login-dialog {
         --paper-dialog: {
           background-color: #fff;
-          width: 65%;
-          margin-left: -35%;
-          margin-top: -25%;
           height: auto;
         }
         ;
       }
 
       #login-dialog-scrollable {
-        height: 150px;
+        height: 200px;
+        overflow: hidden;
       }
       .text-danger{
         color: #a94442;
@@ -40,8 +38,7 @@
 
     <paper-dialog id="login-dialog" modal>
       <h2>Login</h2>
-      <paper-dialog-scrollable id="login-dialog-scrollable">
-        <div class="text-danger" id="loginErrorMessage"></div>
+      <div>
         <form is="iron-form" id="form" method="post" action="/">
           <paper-input-container>
             <label>Email</label>
@@ -54,7 +51,8 @@
             <paper-input-error>Informe a senha</paper-input-error>
           </paper-input-container>
         </form>
-      </paper-dialog-scrollable>
+        <div class="text-danger" id="loginErrorMessage"></div>
+      </div>
       <div class="buttons">
         <paper-button on-click="_loginHandlerClick">Login</paper-button>
       </div>
@@ -66,7 +64,9 @@
       is: 'alvar-login',
 
       open: function(){
-        this.$['login-dialog'].open();
+        var login = this.$['login-dialog'];
+        login.fit();
+        login.open();
       },
 
       close: function(){
@@ -85,7 +85,7 @@
       _loginHandlerClick: function () {
         var inputEmail = this.$['form-email'];
         var inputPassword = this.$['form-password'];
-        var validation = inputEmail.validate() & inputPassword.validate();
+        var validation = inputEmail.validate() && inputPassword.validate();
         if(validation){
           this.login(null,inputEmail.value,inputPassword.value);
         }

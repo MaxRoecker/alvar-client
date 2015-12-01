@@ -32,48 +32,55 @@
         display: block;
         margin: 5rem auto;
       }
+
+      #header{
+        display: flex;
+        align-items: center;
+      }
+      #header__heading{
+        flex-grow: 1;
+        padding-left: 1rem;
+      }
+      #header__heading h2{
+        color: var(--default-primary-color);
+        margin: 0;
+      }
     </style>
     <paper-header-panel>
       <paper-toolbar>
-        <paper-icon-button icon='menu' on-click="_fireMenu" paper-drawer-toggle></paper-icon-button>
+        <paper-icon-button icon="arrow-back" on-click="_fireBack" paper-drawer-toggle></paper-icon-button>
         <h1 class='paper-font-title flex-1'>
           <span>Visualizar Recurso</span>
         </h1>
-        <paper-icon-button icon='file-download' on-click='download'></paper-icon-button>
+        <paper-icon-button id="header__icon" icon="file-download" on-click="download"></paper-icon-button>
+
         <!--
         <paper-icon-button icon='favorite-border'></paper-icon-button>
         -->
       </paper-toolbar>
 
       <div>
-        <paper-spinner id='spinner'></paper-spinner>
         <paper-material id='material' elevation='1' hidden>
-          <p class='paper-font-body2'>
-            <span class='paper-font-body1 label'>Nome</span>
-            <br/>
-            <span>[[resource.name]]</span>
-          </p>
-          <p class='paper-font-body2'>
-            <span class='paper-font-body1 label'>Descrição</span>
-            <br/>
-            <span>[[resource.description]]</span>
-          </p>
-          <p class='paper-font-body2'>
-            <span class='paper-font-body1 label'>Tipo</span>
-            <br/>
+          <div id="header">
             <file-type-icon type="[[resource.archive.type]]"></file-type-icon>
-            <span>[[resource.archive.type]]</span>
-          </p>
-          <p class='paper-font-body2'>
-            <span class='paper-font-body1 label'>Tamanho</span>
-            <br/>
-            <span>[[resource.archive.size]]</span>
-          </p>
-          <p class='paper-font-body2'>
-            <span class='paper-font-body1 label'>Descritores</span>
-            <br/>
-            <span>[[_formatTags(resource.tags)]]</span>
-          </p>
+            <div id="header__heading">
+              <h2 class="paper-font-title">[[resource.name]]</h2>
+              <span class='paper-font-body1 label'><span>[[resource.archive.size]]</span></span>
+            </div>
+          </div>
+
+          <p>[[resource.description]]</p>
+
+          <template is="dom-if" if="[[!_isEmpty(resource.tags)]]" restamp="true">
+            <p class='paper-font-body2'>
+              <span class='paper-font-body1 label'>Descritores</span>
+              <br/>
+              <span>[[_formatTags(resource.tags)]]</span>
+            </p>
+          </template>
+
+          <p class='paper-font-body1 label'>[[_formatDate(resource.lastUpdate)]]</p>
+
           <!--
           <p class='paper-font-body2'>
             <span class='paper-font-body1 label'>Classificação</span>
@@ -81,6 +88,7 @@
             <star-rate></star-rate>
           </p>
           -->
+          <paper-spinner id="spinner"></paper-spinner>
         </paper-material>
       </div>
     </paper-header-panel>
@@ -89,6 +97,8 @@
     <iron-ajax id='ajax-archive' method='GET' handle-as='json' content-type='application/json' on-response='_handleArchiveResponse' on-error='_handleArchiveError'></iron-ajax>
 
   </template>
+  <script src="../../bower_components/moment/min/moment.min.js" charset="utf-8"></script>
+  <script src="../../bower_components/moment/locale/pt-br.js" charset="utf-8"></script>
   <script>
     //download.js v4.0, by dandavis; 2008-2015. [CCBY2] see http://danml.com/download.html for tests/usage
     // v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime
@@ -153,14 +163,14 @@
         function d2b(u) {
           var p = u.split(/[:;,]/),
             t = p[1],
-            dec = p[2] == 'base64' ? atob : decodeURIComponent,
+            dec = p[2] === 'base64' ? atob : decodeURIComponent,
             bin = dec(p.pop()),
             mx = bin.length,
             i = 0,
             uia = new Uint8Array(mx);
 
           for (i; i < mx; ++i) {
-            uia[i] = bin.charCodeAt(i)
+            uia[i] = bin.charCodeAt(i);
           };
 
           return new B([uia], {
@@ -255,7 +265,6 @@
           resource: {
             type: Object,
             notify: true,
-            value: null,
           }
         },
 
@@ -362,6 +371,14 @@
           this.fire('menu');
         },
 
+        _isEmpty: function (tags) {
+          return (tags && tags.length === 0)? true : false;
+        },
+
+        _fireBack: function(){
+          this.fire('back');
+        },
+
         _formatTags: function(array) {
           if(array){
             return array.map(
@@ -372,6 +389,11 @@
           } else {
             return '';
           }
+        },
+
+        _formatDate: function(dateString){
+          var date = moment(dateString);
+          return 'Atualizado há ' + moment(date).fromNow();
         }
 
 

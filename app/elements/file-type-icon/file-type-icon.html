@@ -32,7 +32,7 @@
       properties: {
         'type': {
           type: String,
-          value: "file",
+          value: 'file',
           observer: '_typeObserver'
         }
       },
@@ -50,11 +50,13 @@
           'zip': ['zip','compress'],
         };
 
+        var mapCallback = function(item){
+          return type.indexOf(item) > -1;
+        };
+
         for (var icon in icons) {
           if (icons.hasOwnProperty(icon)) {
-            var filtered = icons[icon].filter(function(item){
-              return type.indexOf(item) > -1;
-            });
+            var filtered = icons[icon].filter(mapCallback);
             if(filtered.length > 0){
               return icon;
             }
@@ -73,7 +75,7 @@
           'text': '#2196F3',
           'image': '#FFC107',
           'video': '#9C27B0',
-          'audio': '#009688',
+          'audio': '#E91E63',
           'zip': '#607D8B',
           'file': '#9E9E9E',
         };

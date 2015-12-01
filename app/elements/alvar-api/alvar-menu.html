@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
 
+<link rel="import" href="alvar-authentication.html">
+
 <dom-module id="alvar-menu">
   <template>
     <style>
@@ -7,31 +9,48 @@
         display: block;
         --paper-menu-selected-item: {
           color: var(--default-primary-color);
+          font-weight: bolder;
         }
+      }
+
+      paper-menu{
+        padding-bottom: 0;
       }
 
       paper-menu a{
         color: var(--secondary-text-color);
         text-decoration: none;
+        font-weight: inherit;
+      }
+      #menu-login-item {
+        cursor: pointer;
+        color: var(--secondary-text-color);
       }
     </style>
+
+    <alvar-authentication id="authentication"></alvar-authentication>
 
 
     <paper-menu id="menu" selected="{{selected}}" attr-for-selected="data-route" on-iron-select="_ironSelectHandler">
       <a data-route="home" href="/">
         <paper-icon-item>
-          <iron-icon icon="home" item-icon></iron-icon>
-          Página inicial
+          <iron-icon icon="search" item-icon></iron-icon>
+          Buscar Recursos
         </paper-icon-item>
       </a>
 
-      <a data-route="resource-create" href="/resource/create">
+      <a data-route="resource-create" href="/resource/create" hidden$="[[!isAuthenticated]]">
         <paper-icon-item data-route="resource-create">
           <iron-icon icon="add" item-icon></iron-icon>
             Adicionar novo
         </paper-icon-item>
       </a>
     </paper-menu>
+
+    <paper-icon-item id="menu-login-item" hidden$="[[isAuthenticated]]" on-click="_fireLogin">
+      <iron-icon icon="lock" item-icon></iron-icon>
+        Entrar
+    </paper-icon-item>
 
   </template>
   <script>
@@ -43,14 +62,25 @@
           type: String,
           value: 'home'
         },
-        isAuthenticat: {
+        isAuthenticated: {
           type: Boolean,
           value: false,
         }
       },
 
+      ready: function(){
+        var authentication = this.$['authentication'].authorize();
+        if(authentication){
+          this.isAuthenticated = true;
+        }
+      },
+
       _ironSelectHandler: function(){
         this.fire('menu-select');
+      },
+
+      _fireLogin: function(){
+        this.fire('login');
       },
 
     });

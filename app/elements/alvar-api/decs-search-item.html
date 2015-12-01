@@ -29,7 +29,7 @@
         <div>[[name]]</div>
         <template is="dom-if" if=[[opened]]>
           <template is="dom-if" if="[[_isEmpty()]]">
-            <span secondary>Não há descritores sinônimos</span>
+            <span secondary>Não há sinônimos</span>
           </template>
           <template is="dom-if" if="[[_isNotEmpty()]]">
             <span secondary>[[_formatSynonyms(synonyms,0,3)]]</span>
@@ -48,7 +48,7 @@
       properties: {
         name: {
           type: String,
-          value: "",
+          value: '',
         },
         synonyms: {
           type: Array,

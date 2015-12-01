@@ -48,29 +48,29 @@
 <body unresolved class="fullbleed layout vertical">
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
-    <alvar-login id="alvar-login"></alvar-login>
+    <alvar-login id="alvar-login" on-authorized="closeLogin"></alvar-login>
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Area -->
       <paper-header-panel drawer fixed>
         <paper-toolbar id="drawerToolbar">
           <span class="paper-font-title">Alvar</span>
         </paper-toolbar>
-        <alvar-menu id="menu" selected="{{route}}" on-menu-select="onMenuSelect" ></alvar-menu>
+        <alvar-menu id="menu" selected="{{route}}" on-menu-select="closeMenu" on-login="openLogin"></alvar-menu>
       </paper-header-panel>
 
       <!-- Main Area -->
       <iron-pages attr-for-selected="data-route" selected="{{route}}" main>
 
         <section data-route="home" class="page">
-          <resource-view-list id="resource-view-list"></resource-view-list>
+          <resource-view-list id="resource-view-list" on-menu="openMenu"></resource-view-list>
         </section>
 
         <section data-route="resource-create" class="page">
-          <resource-create-interface id="resource-create-interface"></resource-create-interface>
+          <resource-create-interface id="resource-create-interface"  on-menu="openMenu" on-unauthorized="openLogin" on-resource-created="redirectToHome"></resource-create-interface>
         </section>
 
         <section data-route="resource-info" class="page">
-          <resource-view resource-id="{{params.id}}"></resource-view>
+          <resource-view resource-id="{{params.id}}" on-back="redirectToPrevious"></resource-view>
         </section>
 
 

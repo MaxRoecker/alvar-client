@@ -48,14 +48,14 @@
 <body unresolved class="fullbleed layout vertical">
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
-    <alvar-login id="alvar-login" on-authorized="closeLogin"></alvar-login>
+    <alvar-login id="alvar-login" on-authorized="authenticatedHandler"></alvar-login>
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Area -->
       <paper-header-panel drawer fixed>
         <paper-toolbar id="drawerToolbar">
           <span class="paper-font-title">Alvar</span>
         </paper-toolbar>
-        <alvar-menu id="menu" selected="{{route}}" on-menu-select="closeMenu" on-login="openLogin"></alvar-menu>
+        <alvar-menu id="menu" selected="{{route}}" authenticated="{{authenticated}}" on-menu-select="closeMenu" on-login="openLogin"></alvar-menu>
       </paper-header-panel>
 
       <!-- Main Area -->
@@ -66,7 +66,7 @@
         </section>
 
         <section data-route="resource-create" class="page">
-          <resource-create-interface id="resource-create-interface"  on-menu="openMenu" on-unauthorized="openLogin" on-resource-created="redirectToHome"></resource-create-interface>
+          <resource-create-interface id="resource-create-interface" on-menu="openMenu" on-unauthorized="openLogin" on-resource-created="redirectToHome"></resource-create-interface>
         </section>
 
         <section data-route="resource-info" class="page">

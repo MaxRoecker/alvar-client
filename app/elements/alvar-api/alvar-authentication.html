@@ -21,6 +21,10 @@
       Polymer({
         is: 'alvar-authentication',
 
+        isAuthenticated: function(){
+          return this.authorize() != null;
+        },
+
         authorize: function() {
           this.$.storage.reload();
           var authorization = this.$.storage.value;

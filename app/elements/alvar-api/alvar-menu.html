@@ -39,7 +39,7 @@
         </paper-icon-item>
       </a>
 
-      <a data-route="resource-create" href="/resource/create" hidden$="[[!isAuthenticated]]">
+      <a data-route="resource-create" href="/resource/create" hidden$="[[!authenticated]]">
         <paper-icon-item data-route="resource-create">
           <iron-icon icon="add" item-icon></iron-icon>
             Adicionar novo
@@ -47,7 +47,7 @@
       </a>
     </paper-menu>
 
-    <paper-icon-item id="menu-login-item" hidden$="[[isAuthenticated]]" on-click="_fireLogin">
+    <paper-icon-item id="menu-login-item" hidden$="[[authenticated]]" on-click="_fireLogin">
       <iron-icon icon="lock" item-icon></iron-icon>
         Entrar
     </paper-icon-item>
@@ -62,18 +62,18 @@
           type: String,
           value: 'home'
         },
-        isAuthenticated: {
+        authenticated: {
           type: Boolean,
           value: false,
         }
       },
 
-      ready: function(){
-        var authentication = this.$['authentication'].authorize();
-        if(authentication){
-          this.isAuthenticated = true;
-        }
-      },
+      // ready: function(){
+      //   var authentication = this.$['authentication'].authorize();
+      //   if(authentication){
+      //     this.authenticated = true;
+      //   }
+      // },
 
       _ironSelectHandler: function(){
         this.fire('menu-select');

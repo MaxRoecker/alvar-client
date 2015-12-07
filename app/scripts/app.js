@@ -15,6 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  app.authenticated = false;
+
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.
     if (!document.querySelector('platinum-sw-cache').disabled) {
@@ -32,6 +34,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   window.addEventListener('WebComponentsReady', function() {
     var resourceViewList = document.querySelector('resource-view-list');
     resourceViewList.refresh();
+
+    var authorization = document.createElement('alvar-authentication');
+    console.log(authorization.isAuthenticated());
+    app.authenticated = authorization.isAuthenticated();
+
     // imports are loaded and elements have been registered
 
     // var login = document.querySelector('alvar-login');
@@ -62,6 +69,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // resourceCreateInterface.addEventListener('menu',menuHandler);
 
   });
+
+  app.authenticatedHandler = function(){
+    app.authenticated = true;
+    app.closeLogin();
+  };
+
+  app.unauthenticatedHandler = function(){
+    app.authenticated = false;
+    app.openLogin();
+  };
 
   //Open login modal
   app.openLogin = function () {

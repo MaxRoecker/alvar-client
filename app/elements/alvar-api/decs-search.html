@@ -95,8 +95,13 @@
                           on-secondaction="_resultSecondActionHandler"></decs-search-item>
       </template>
     </div>
-    <paper-spinner id="spinner"></paper-spinner>
 
+    <div class="paper-font-body2">
+      <template is="dom-if" if="[[_isEmpty(results,searching)]]">
+        Não foram encontrados descritores no DeCS com o termo desejado.
+      </template>
+    </div>
+    <paper-spinner id="spinner" active="[[searching]]"></paper-spinner>
 
   </template>
   <script>
@@ -120,6 +125,11 @@
             value: function() {
               return [];
             }
+          },
+          searching: {
+            type: Boolean,
+            notify: true,
+            value: false
           }
         },
 
@@ -143,23 +153,34 @@
         },
 
         _searchDecs: function() {
-          var params = {
-            'search': this.search
-          };
-          var decsAjax = this.$['decs-ajax'];
-          decsAjax.params = params;
-          decsAjax.generateRequest();
-
-          var searchButton = this.$['spinner'];
-          searchButton.active = true;
+          this._setResults([]);
+          if (this.search != ''){
+            var params = {
+              'search': this.search
+            };
+            var decsAjax = this.$['decs-ajax'];
+            this.searching = true;
+            decsAjax.params = params;
+            decsAjax.generateRequest();
+            // var searchButton = this.$['spinner'];
+            // searchButton.active = true;
+          }
         },
 
         _handleDecsResponse: function() {
           var decsAjax = this.$['decs-ajax'];
           var results = decsAjax.lastResponse.result;
           this._setResults(results);
-          var searchButton = this.$['spinner'];
-          searchButton.active = false;
+          this.searching = false;
+          // var searchButton = this.$['spinner'];
+          // searchButton.active = false;
+        },
+
+        _isEmpty: function (results, searching){
+          if (!searching && results){
+            return results.length == 0;
+          }
+          return false;
         },
 
         serialize: function() {

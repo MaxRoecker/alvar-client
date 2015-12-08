@@ -111,11 +111,11 @@
       },
 
       _loginHandlerClick: function () {
-        this._setLoging(true);
         var inputEmail = this.$['form-email'];
         var inputPassword = this.$['form-password'];
         var validation = inputEmail.validate() && inputPassword.validate();
         if(validation){
+          this._setLoging(true);
           this.login(null,inputEmail.value,inputPassword.value);
         }
       },

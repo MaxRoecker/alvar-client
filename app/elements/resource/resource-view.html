@@ -48,7 +48,7 @@
     </style>
     <paper-header-panel>
       <paper-toolbar>
-        <paper-icon-button icon="arrow-back" on-click="_fireBack" paper-drawer-toggle></paper-icon-button>
+        <paper-icon-button icon="arrow-back" on-click="_fireBack"></paper-icon-button>
         <h1 class='paper-font-title flex-1'>
           <span>Visualizar Recurso</span>
         </h1>
@@ -60,7 +60,7 @@
       </paper-toolbar>
 
       <div>
-        <paper-material id='material' elevation='1' hidden>
+        <paper-material elevation='1' hidden$="[[loading]]">
           <div id="header">
             <file-type-icon type="[[resource.archive.type]]"></file-type-icon>
             <div id="header__heading">
@@ -88,7 +88,9 @@
             <star-rate></star-rate>
           </p>
           -->
-          <paper-spinner id="spinner"></paper-spinner>
+        </paper-material>
+        <paper-material elevation="1" hidden$="[[!loading]]">
+          <paper-spinner id="spinner" active></paper-spinner>
         </paper-material>
       </div>
     </paper-header-panel>
@@ -262,6 +264,12 @@
             type: Number,
             observer: '_resourceIdObserver'
           },
+          loading: {
+            type: Boolean,
+            value: false,
+            readOnly: true,
+            notify: true,
+          },
           resource: {
             type: Object,
             notify: true,
@@ -269,13 +277,6 @@
         },
 
         _resourceIdObserver: function(newValue) {
-
-          var spinner = this.$['spinner'];
-          this.toggleAttribute('hidden', false, spinner);
-          spinner.active = true;
-          var material = this.$['material'];
-          this.toggleAttribute('hidden', true, material);
-
           var ajaxResource = this.$['ajax-resource'];
           ajaxResource.url = 'http://isingular.com.br:3000/api/Resources/' + newValue;
           ajaxResource.params = {
@@ -288,6 +289,7 @@
               }]
             })
           };
+          this._setLoading(true);
           ajaxResource.generateRequest();
         },
 
@@ -308,11 +310,7 @@
           var resource = ajaxResource.lastResponse;
           resource.archive.size = this._readableSize(resource.archive.size);
           this.resource = resource;
-          var spinner = this.$['spinner'];
-          spinner.active = false;
-          this.toggleAttribute('hidden', true, spinner);
-          var material = this.$['material'];
-          this.toggleAttribute('hidden', false, material);
+          this._setLoading(false);
         },
 
         _handleResourceError: function() {
@@ -320,6 +318,7 @@
         },
 
         _handleArchiveResponse: function() {
+          this._setLoading(false);
           var ajaxArchive = this.$['ajax-archive'];
           var archive = ajaxArchive.lastResponse;
           var b64Data = archive.payload.split(',')[1];
@@ -335,7 +334,7 @@
         download: function() {
           var ajaxArchive = this.$['ajax-archive'];
           ajaxArchive.url = 'http://isingular.com.br:3000/api/Archives/' + this.resource.archive.id;
-
+          this._setLoading(true);
           ajaxArchive.generateRequest();
           /*
           var b64Data = this.resource.archive.payload.split(',')[1];

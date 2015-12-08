@@ -21,7 +21,7 @@
       :host {
         --paper-input-container-color: var(--light-primary-color);
         --paper-input-container-input: {
-          color: var(--text-primary-color);
+          color: #ffffff;
         }
         ;
       }
@@ -44,6 +44,12 @@
         align-items: center;
       }
 
+      paper-spinner {
+        position: absolute;
+        top: 5rem;
+        left: calc(50%);
+      }
+
       a {
         width: calc(100%);
         display: block;
@@ -57,6 +63,21 @@
         text-align: right;
       }
 
+      .text-center{
+        text-align: center;
+      }
+
+      .error-message {
+        margin: 2rem 1rem;
+        color: var(--secondary-text-color);
+      }
+
+      .big {
+        --iron-icon-height: 4rem;
+        --iron-icon-width: 4rem;
+        color: var(--disabled-text-color);
+      }
+
     </style>
     <paper-header-panel>
       <paper-toolbar>
@@ -65,16 +86,11 @@
           <paper-input value="{{query}}" label="" placeholder="Procurar" type="text" no-label-float></paper-input>
         </span>
         <paper-icon-button icon="search" on-click="search"></paper-icon-button>
-        <paper-icon-button icon="refresh" on-click="refresh"></paper-icon-button>
+        <paper-icon-button icon="refresh" disabled$="[[loading]]" on-click="refresh"></paper-icon-button>
       </paper-toolbar>
 
       <div>
-
-        <div style="text-align: center">
-          <paper-spinner id="spinner" hidden></paper-spinner>
-        </div>
-
-        <paper-material elevation="1">
+        <paper-material elevation="1" hidden$="[[loading]]">
           <template is="dom-repeat" items="[[resources]]">
             <a href="[[_hrefItem(item)]]">
               <paper-icon-item>
@@ -88,6 +104,33 @@
             </a>
           </template>
         </paper-material>
+
+
+        <div class="error-message" hidden="[[!_isEmpty(resources,loading)]]">
+          <p style="text-align: center;">
+            <iron-icon icon="help" class="big"></iron-icon>
+          </p>
+          <p>
+            Não há recursos a serem exibidos. Sugestões:
+          </p>
+          <ul class="paper-font-body1">
+            <li>
+              Verifique sua conexão com a internet
+            </li>
+            <li>
+              Tente termos de pesquisa diferentes
+            </li>
+            <li>
+              Tente termos de pesquisa mais genéricos
+            </li>
+            <li>
+              Certifique-se que as palavras chaves estejam escritas corretamente
+            </li>
+          </ul>
+        </div>
+
+        <paper-spinner active="[[loading]]"></paper-spinner>
+
       </div>
     </paper-header-panel>
 
@@ -106,6 +149,12 @@
             type: String,
             value: '',
           },
+          loading: {
+            type: Boolean,
+            value: false,
+            readOnly: true,
+            notify: true,
+          },
           resources: {
             type: Array,
             value: function() {
@@ -122,7 +171,7 @@
          * Creates a resource.
          *
          */
-        refresh: function() {
+        refresh: function(event) {
           var ajax = this.$['ajax-resource'];
 
           var filter = JSON.stringify({
@@ -138,40 +187,44 @@
             'filter': filter
           };
 
+          this._setLoading(true);
           ajax.generateRequest();
         },
 
         search: function() {
-          var ajax = this.$['ajax-resource'];
-          var filter = JSON.stringify({
-            'include': ['tags', {
-              'relation': 'archive',
-              'scope': {
-                'fields': ['type']
+          if(this.query != ''){
+            var ajax = this.$['ajax-resource'];
+            var filter = JSON.stringify({
+              'include': ['tags', {
+                'relation': 'archive',
+                'scope': {
+                  'fields': ['type']
+                }
+              }],
+              'where': {
+                'or': [{
+                  'name': {
+                    'like': '%' + this.query + '%'
+                  }
+                }, {
+                  'description': {
+                    'like': '%' + this.query + '%'
+                  }
+                }, {
+                  'tagsStringify': {
+                    'like': '%' + this.query + '%'
+                  }
+                }]
               }
-            }],
-            'where': {
-              'or': [{
-                'name': {
-                  'like': '%' + this.query + '%'
-                }
-              }, {
-                'description': {
-                  'like': '%' + this.query + '%'
-                }
-              }, {
-                'tagsStringify': {
-                  'like': '%' + this.query + '%'
-                }
-              }]
-            }
-          });
+            });
 
-          ajax.params = {
-            'filter': filter
-          };
+            ajax.params = {
+              'filter': filter
+            };
 
-          ajax.generateRequest();
+            this._setLoading(true);
+            ajax.generateRequest();
+          }
         },
 
         _resourcesObserver: function() {
@@ -181,11 +234,19 @@
 
         _handleResourceResponse: function() {
           var resources = this.$['ajax-resource'].lastResponse;
+          this._setLoading(false);
           this.resources = resources;
         },
 
         _hrefItem: function(item) {
           return '/resource/view/' + item.id;
+        },
+
+        _isEmpty: function (resources, loading) {
+          if(resources && !loading){
+            return resources.length == 0;
+          }
+          return false;
         },
 
         _handleFavoriteClick: function(e) {

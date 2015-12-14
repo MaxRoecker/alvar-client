@@ -133,4 +133,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      document.getElementById('mainContainer').scrollTop = 0;
   };
 
+  app.loadNoResultQueries = function(){
+    document.querySelector('no-result-queries-list').refresh();
+  }
+
 })(document);

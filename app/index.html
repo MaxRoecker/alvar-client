@@ -49,7 +49,7 @@
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
     <alvar-login id="alvar-login" on-authorized="authenticatedHandler"></alvar-login>
-    <paper-drawer-panel id="paperDrawerPanel">
+    <paper-drawer-panel id="paperDrawerPanel" drawer-width="270px">
       <!-- Drawer Area -->
       <paper-header-panel drawer fixed>
         <paper-toolbar id="drawerToolbar">
@@ -67,6 +67,10 @@
 
         <section data-route="resource-create" class="page">
           <resource-create-interface id="resource-create-interface" on-menu="openMenu" on-unauthorized="openLogin" on-resource-created="redirectToHome"></resource-create-interface>
+        </section>
+
+        <section data-route="no-result-queries-list" class="page">
+          <no-result-queries-list id="no-result-queries-list" on-menu="openMenu" on-unauthorized="openLogin"></no-result-queries-list>
         </section>
 
         <section data-route="resource-info" class="page">

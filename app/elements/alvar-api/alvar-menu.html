@@ -46,6 +46,13 @@
             Novo Recurso
         </paper-icon-item>
       </a>
+
+      <a data-route="no-result-queries-list" href="/no-result-queries/list" hidden$="[[!authenticated]]">
+        <paper-icon-item data-route="no-result-queries-list">
+          <iron-icon icon="highlight-off" item-icon></iron-icon>
+            Pesquisas sem resultado
+        </paper-icon-item>
+      </a>
     </paper-menu>
 
     <paper-icon-item id="menu-login-item" hidden$="[[authenticated]]" on-click="_fireLogin">

@@ -156,7 +156,7 @@
 
         _formatDate: function(dateString) {
           var date = moment(dateString);
-          return 'Pesquisado há ' + moment(date).fromNow();
+          return moment(date).format('L');
         }
 
       });

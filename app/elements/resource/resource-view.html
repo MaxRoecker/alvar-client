@@ -8,6 +8,7 @@
 <link rel='import' href='../../bower_components/paper-icon-button/paper-icon-button.html' />
 <link rel='import' href='../../bower_components/paper-toolbar/paper-toolbar.html' />
 <link rel='import' href='../../bower_components/paper-spinner/paper-spinner.html' />
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../file-type-icon/file-type-icon.html" />
 
@@ -52,7 +53,7 @@
         <h1 class='paper-font-title flex-1'>
           <span>Visualizar Recurso</span>
         </h1>
-        <paper-icon-button id="header__icon" icon="file-download" on-click="download"></paper-icon-button>
+        <paper-icon-button icon="file-download" disabled="[[loading]]" on-click="download"></paper-icon-button>
 
         <!--
         <paper-icon-button icon='favorite-border'></paper-icon-button>
@@ -93,6 +94,8 @@
           <paper-spinner id="spinner" active></paper-spinner>
         </paper-material>
       </div>
+
+      <<paper-toast text="O arquivo está sendo processado." duration="10000" opened="[[loading]]" auto-fit-on-attach></paper-toast>
     </paper-header-panel>
 
     <iron-ajax id='ajax-resource' method='GET' handle-as='json' content-type='application/json' on-response='_handleResourceResponse' on-error='_handleResourceError'></iron-ajax>

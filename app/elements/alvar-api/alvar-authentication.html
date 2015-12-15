@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html" />
-
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html" />
 
 <dom-module id="alvar-authentication">
@@ -10,9 +9,7 @@
       }
 
     </style>
-
     <iron-localstorage id="storage" name="alvar-authorization"></iron-localstorage>
-
   </template>
   <script src="../../bower_components/moment/min/moment.min.js" charset="utf-8"></script>
   <script>
@@ -21,8 +18,8 @@
       Polymer({
         is: 'alvar-authentication',
 
-        isAuthenticated: function(){
-          return this.authorize() != null;
+        isAuthenticated: function() {
+          return this.authorize() !== null;
         },
 
         authorize: function() {
@@ -33,8 +30,7 @@
             if (validation.isBefore(moment())) {
               authorization = null;
             }
-          }
-          else {
+          } else {
             authorization = null;
           }
           return authorization;

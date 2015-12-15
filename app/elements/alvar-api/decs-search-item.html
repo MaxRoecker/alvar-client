@@ -16,7 +16,7 @@
         width: calc(100% + 16px);
       }
 
-      paper-icon-item[selected]{
+      paper-icon-item[selected] {
         font-weight: bold;
         color: var(--default-primary-color);
       }
@@ -68,10 +68,10 @@
         }
       },
 
-
       open: function() {
         this.opened = true;
       },
+
       close: function() {
         this.opened = false;
       },
@@ -79,27 +79,29 @@
       _iconFirstAction: function(opened) {
         return (opened) ? 'expand-less' : 'expand-more';
       },
-      _iconSecondAction: function (selected) {
+
+      _iconSecondAction: function(selected) {
         return (selected) ? 'delete' : 'add';
       },
 
-      _isEmpty: function(){
+      _isEmpty: function() {
         var array = this.synonyms;
-        if(array){
-          return (array.length == 0);
+        if (array) {
+          return (array.length === 0);
         }
         return true;
       },
-      _isNotEmpty: function(){
-        if(!this.synonyms){
+
+      _isNotEmpty: function() {
+        if (!this.synonyms) {
           this.synonyms = [];
         }
-        return (this.synonyms.length > 0)? true : false;
+        return (this.synonyms.length > 0) ? true : false;
       },
 
       _formatSynonyms: function(synonyms, part, from) {
         var howmany = Math.ceil(synonyms.length / from);
-        var slice = synonyms.slice(howmany * (part), howmany * (part+1));
+        var slice = synonyms.slice(howmany * (part), howmany * (part + 1));
         return slice.join(', ');
       },
 

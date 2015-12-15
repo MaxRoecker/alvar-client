@@ -9,8 +9,6 @@
 <link rel="import" href="resource-form.html" />
 <link rel="import" href="../alvar-api/alvar-authentication.html" />
 
-
-
 <dom-module id="resource-create-interface">
 
   <template>
@@ -22,7 +20,6 @@
         padding: 1rem;
         background-color: #fff;
       }
-
 
     </style>
     <paper-header-panel>
@@ -38,7 +35,7 @@
             <resource-form id="resource-form"></resource-form>
           </div>
           <div style="text-align: center" hidden$="[[!loading]]">
-            <paper-spinner active="[[loading]]" ></paper-spinner>
+            <paper-spinner active="[[loading]]"></paper-spinner>
           </div>
 
         </paper-material>
@@ -50,21 +47,12 @@
 
     </paper-header-panel>
 
-    <iron-ajax id="ajax-resource"
-               url="http://isingular.com.br:3000/api/Resources"
-               method="POST" handle-as="json" content-type="application/json"
-               on-response="_handleResourceResponse"
-               on-error="_handleAjaxError"></iron-ajax>
-    <iron-ajax id="ajax-archive"
-               url=""
-               method="POST" handle-as="json" content-type="application/json"
-               on-response="_handleArchiveResponse"
-               on-error="_handleAjaxError"></iron-ajax>
-    <iron-ajax id="ajax-tag"
-               url=""
-               method="POST" handle-as="json" content-type="application/json"
-               on-response="_handleTagsResponse"
-               on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax id="ajax-resource" url="http://isingular.com.br:3000/api/Resources" method="POST" handle-as="json"
+    content-type="application/json" on-response="_handleResourceResponse" on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax id="ajax-archive" url="" method="POST" handle-as="json" content-type="application/json" on-response="_handleArchiveResponse"
+    on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax id="ajax-tag" url="" method="POST" handle-as="json" content-type="application/json" on-response="_handleTagsResponse"
+    on-error="_handleAjaxError"></iron-ajax>
     <alvar-authentication id="authentication"></alvar-authentication>
   </template>
   <script>
@@ -90,7 +78,7 @@
           var authorization = this.$['authentication'].authorize();
           if (authorization) {
             var resourceForm = this.$['resource-form'];
-            if(resourceForm.validate()){
+            if (resourceForm.validate()) {
               var resource = resourceForm.serializeResource();
               var ajax = this.$['ajax-resource'];
               ajax.headers = {
@@ -111,11 +99,6 @@
               this._setLoading(true);
 
               ajax.generateRequest();
-
-              this.toggleAttribute('hidden',true,resourceForm);
-              var spinner = this.$['spinner'];
-              this.toggleAttribute('hidden',false,spinner);
-              this.toggleAttribute('active',true,spinner);
             }
           }
           else {
@@ -126,7 +109,7 @@
         /**
          * Cancel the current state of
          */
-        cancel: function () {
+        cancel: function() {
           this._setLoading(false);
         },
 
@@ -165,7 +148,8 @@
 
           var tags = this.$['resource-form'].serializeTags();
           console.log(tags);
-          ajaxTag.url = 'http://isingular.com.br:3000/api/Resources/' + this.resource.id + '/tags';
+          ajaxTag.url = 'http://isingular.com.br:3000/api/Resources/' + this.resource.id +
+            '/tags';
           ajaxTag.body = tags;
           ajaxTag.generateRequest();
         },
@@ -178,19 +162,19 @@
           var resourceForm = this.$['resource-form'];
           resourceForm.reset();
           this._setLoading(false);
-          this.fire('resource-created',this.resource);
+          this.fire('resource-created', this.resource);
         },
 
-        _handleAjaxError: function (event) {
+        _handleAjaxError: function(event) {
           var status = event.srcElement.lastError.request.status;
           console.log(status);
-          if(status === 401){
+          if (status === 401) {
             this.fire('unauthorized');
           }
           this.cancel();
         },
 
-        _fireMenu: function () {
+        _fireMenu: function() {
           this.fire('menu');
         },
 

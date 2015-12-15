@@ -70,30 +70,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   });
 
-  app.authenticatedHandler = function(){
+  app.authenticatedHandler = function() {
     app.authenticated = true;
     app.closeLogin();
   };
 
-  app.unauthenticatedHandler = function(){
+  app.unauthenticatedHandler = function() {
     app.authenticated = false;
     app.openLogin();
   };
 
   //Open login modal
-  app.openLogin = function () {
+  app.openLogin = function() {
     var login = document.querySelector('alvar-login');
     login.open();
   };
 
   //Close login modal
-  app.closeLogin = function (){
+  app.closeLogin = function() {
     var login = document.querySelector('alvar-login');
     login.close();
   };
 
   //Open menu if screen is narrow
-  app.openMenu = function () {
+  app.openMenu = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
     if (drawerPanel.narrow) {
       drawerPanel.openDrawer();
@@ -101,22 +101,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   };
 
   //Close menu if the screen is narrow
-  app.closeMenu = function(){
+  app.closeMenu = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
     if (drawerPanel.narrow) {
       drawerPanel.closeDrawer();
     }
-  }
+  };
 
   //Redirect the user to home page
-  app.redirectToHome = function () {
+  app.redirectToHome = function() {
     var resourceViewList = document.querySelector('resource-view-list');
     resourceViewList.refresh();
     page.redirect('/');
   };
 
+  app.redirectToResource = function (event) {
+    var resource = event.detail;
+    if(resource && resource.id){
+      var address = '/resource/view/' + resource.id;
+      console.log(address);
+      page.redirect(address);
+    }
+  };
+
   //Redirect the user to previous page
-  app.redirectToPrevious = function () {
+  app.redirectToPrevious = function() {
     window.history.back();
   };
 
@@ -130,11 +139,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // Scroll page to top and expand header
   app.scrollPageToTop = function() {
-     document.getElementById('mainContainer').scrollTop = 0;
+    document.getElementById('mainContainer').scrollTop = 0;
   };
 
-  app.loadNoResultQueries = function(){
+  app.loadNoResultQueries = function() {
     document.querySelector('no-result-queries-list').refresh();
-  }
+  };
 
 })(document);

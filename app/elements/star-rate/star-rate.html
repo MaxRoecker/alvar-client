@@ -21,7 +21,7 @@
   </template>
 
   <script>
-    (function(){
+    (function() {
       Polymer({
         is: 'star-rate',
 
@@ -42,33 +42,34 @@
           '_changeStars(stars,rating)'
         ],
 
-        _setStarsFilled: function(value){
+        _setStarsFilled: function(value) {
           var array = new Array(value);
-          for(var i = 1;i <= value; array[i-1] = i++){}
+          for (var i = 1; i <= value; array[i - 1] = i++) {}
           this.$['stars-filled'].items = array;
         },
 
-        _setStarsBordered: function(value){
+        _setStarsBordered: function(value) {
           var array = new Array(value);
-          var index = this.rating+1;
-          for(var i = 0; i < array.length; array[i++] = index++){}
+          var index = this.rating + 1;
+          for (var i = 0; i < array.length; array[i++] = index++) {}
           this.$['stars-bordered'].items = array;
         },
 
-        _changeStars: function(stars,rating){
+        _changeStars: function(stars, rating) {
           var starsBordered = stars - rating;
-          if(starsBordered < 0){
+          if (starsBordered < 0) {
             starsBordered = stars;
           }
           this._setStarsFilled(rating);
           this._setStarsBordered(starsBordered);
         },
 
-        _rate: function(e){
+        _rate: function(e) {
           this.rating = e.srcElement.index;
         }
 
       });
     })();
+
   </script>
 </dom-module>

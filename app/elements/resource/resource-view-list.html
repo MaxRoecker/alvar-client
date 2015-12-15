@@ -63,7 +63,7 @@
         text-align: right;
       }
 
-      .text-center{
+      .text-center {
         text-align: center;
       }
 
@@ -192,7 +192,7 @@
         },
 
         search: function() {
-          if(this.query != ''){
+          if (this.query !== '') {
             var ajax = this.$['ajax-resource'];
             var filter = JSON.stringify({
               'include': ['tags', {
@@ -242,9 +242,9 @@
           return '/resource/view/' + item.id;
         },
 
-        _isEmpty: function (resources, loading) {
-          if(resources && !loading){
-            return resources.length == 0;
+        _isEmpty: function(resources, loading) {
+          if (resources && !loading) {
+            return resources.length === 0;
           }
           return false;
         },

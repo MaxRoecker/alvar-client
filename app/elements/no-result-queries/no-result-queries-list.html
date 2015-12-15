@@ -7,10 +7,6 @@
 <link rel="import" href="../../bower_components/paper-material/paper-material.html" />
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html" />
-<link rel="import" href="../../bower_components/paper-item/paper-item.html" />
-<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html" />
-<link rel="import" href="../../bower_components/paper-item/paper-item-body.html" />
-<link rel="import" href="../../bower_components/paper-input/paper-input.html" />
 <link rel="import" href="../../bower_components/paper-datatable/paper-datatable.html">
 <link rel="import" href="../../bower_components/paper-datatable/paper-datatable-column.html">
 <link rel="import" href="../../bower_components/paper-datatable/paper-datatable-card.html">
@@ -79,6 +75,7 @@
         --iron-icon-width: 4rem;
         color: var(--disabled-text-color);
       }
+
     </style>
     <paper-header-panel>
       <paper-toolbar>
@@ -100,7 +97,8 @@
       </div>
     </paper-header-panel>
 
-    <iron-ajax id="ajax" url="http://isingular.com.br:3000/api/NoResultQueries" method="GET" handle-as="json" on-response="_handleNoReultQueriesResponse"></iron-ajax>
+    <iron-ajax id="ajax" url="http://isingular.com.br:3000/api/NoResultQueries" method="GET" handle-as="json"
+    on-response="_handleNoReultQueriesResponse"></iron-ajax>
   </template>
   <script src="../../bower_components/moment/min/moment.min.js" charset="utf-8"></script>
   <script src="../../bower_components/moment/locale/pt-br.js" charset="utf-8"></script>
@@ -161,5 +159,6 @@
 
       });
     })();
+
   </script>
 </dom-module>

@@ -5,7 +5,8 @@
 <link rel="import" href="../../bower_components/iron-form/iron-form.html" />
 <link rel="import" href="../../bower_components/paper-button/paper-button.html" />
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html" />
-<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html"/>
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html"
+/>
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html" />
 <link rel="import" href="../../bower_components/paper-input/paper-input-container.html" />
 
@@ -26,16 +27,20 @@
         height: 200px;
         overflow: hidden;
       }
-      .text-danger{
+
+      .text-danger {
         color: #a94442;
       }
-      [data-loging]{
+
+      [data-loging] {
         opacity: 0;
       }
-      paper-spinner{
+
+      paper-spinner {
         margin: -1rem auto;
         display: block;
       }
+
     </style>
 
     <iron-ajax id="ajax" url="http://isingular.com.br:3000/api/Users/login" handle-as="json" content-type="application/json"
@@ -60,7 +65,7 @@
         </form>
         <div class="text-danger" id="loginErrorMessage"></div>
       </div>
-      <paper-spinner id="spinner" active="[[loging]]" ></paper-spinner>
+      <paper-spinner id="spinner" active="[[loging]]"></paper-spinner>
       <div class="buttons" data-loging$="[[loging]]">
         <paper-button on-click="_loginCancelHandlerClick">Cancelar</paper-button>
         <paper-button on-click="_loginHandlerClick">Login</paper-button>
@@ -80,13 +85,13 @@
         }
       },
 
-      open: function(){
+      open: function() {
         var login = this.$['login-dialog'];
         login.fit();
         login.open();
       },
 
-      close: function(){
+      close: function() {
         this.$['login-dialog'].close();
       },
 
@@ -99,51 +104,52 @@
         this._requestLogin(credentials);
       },
 
-      _clearForm: function () {
+      _clearForm: function() {
         var inputEmail = this.$['form-email'];
         var containerEmail = this.$['form-container-email'];
         var inputPassword = this.$['form-password'];
-        inputEmail.bindValue = "";
+        inputEmail.bindValue = '';
         containerEmail.invalid = false;
-        inputPassword.bindValue = "";
+        inputPassword.bindValue = '';
         document.getElementById('loginErrorMessage').innerHTML = '';
 
       },
 
-      _loginHandlerClick: function () {
+      _loginHandlerClick: function() {
         this._setLoging(true);
         var inputEmail = this.$['form-email'];
         var inputPassword = this.$['form-password'];
         var validation = inputEmail.validate() && inputPassword.validate();
-        if(validation){
-          this.login(null,inputEmail.value,inputPassword.value);
+        if (validation) {
+          this.login(null, inputEmail.value, inputPassword.value);
         }
       },
 
-      _loginCancelHandlerClick: function () {
+      _loginCancelHandlerClick: function() {
         this._clearForm();
         this.close();
       },
 
       _requestLogin: function(credentials) {
-        var ajax = this.$['ajax'];
+        var ajax = this.$.ajax;
         ajax.body = credentials;
         ajax.generateRequest();
       },
 
       _handleLoginResponse: function() {
         this._setLoging(false);
-        var authorization = this.$['ajax'].lastResponse;
+        var authorization = this.$.ajax.lastResponse;
         this.$.storage.value = authorization;
         this.fire('authorized');
       },
 
       _handleErrorResponse: function() {
-        console.error(this.$['ajax'].lastError);
+        console.error(this.$.ajax.lastError);
         this._setLoging(false);
         var inputPassword = this.$['form-password'];
-        inputPassword.bindValue="";
-        document.getElementById('loginErrorMessage').innerHTML = 'Login e/ou senha inválido(s)!';
+        inputPassword.bindValue = '';
+        document.getElementById('loginErrorMessage').innerHTML =
+          'Login e/ou senha inválido(s)!';
       },
 
     });

@@ -39,12 +39,15 @@
       .rotate {
         --paper-icon-button: {
           animation: spin 4s linear infinite;
-        };
+        }
+        ;
       }
+
       .no-rotate {
         --paper-icon-button: {
           animation: none;
-        };
+        }
+        ;
       }
 
       @keyframes spin {
@@ -53,15 +56,14 @@
         }
       }
 
-      .tags{
+      .tags {
         width: calc(100% - 2rem);
       }
 
-      paper-spinner{
+      paper-spinner {
         margin: 1rem auto;
         display: block;
       }
-
 
     </style>
 
@@ -81,18 +83,15 @@
 
     <div>
       <template is="dom-repeat" items="[[selecteds]]">
-        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]"
-                          selected
-                          on-firstaction="_firstActionHandler"
-                          on-secondaction="_selectedSecondActionHandler"></decs-search-item>
+        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]" selected on-firstaction="_firstActionHandler"
+        on-secondaction="_selectedSecondActionHandler"></decs-search-item>
       </template>
     </div>
 
     <div>
       <template is="dom-repeat" items="[[results]]">
-        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]"
-                          on-firstaction="_firstActionHandler"
-                          on-secondaction="_resultSecondActionHandler"></decs-search-item>
+        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]" on-firstaction="_firstActionHandler"
+        on-secondaction="_resultSecondActionHandler"></decs-search-item>
       </template>
     </div>
 
@@ -133,28 +132,28 @@
           }
         },
 
-        _firstActionHandler: function (event) {
-          if(event.target.opened){
+        _firstActionHandler: function(event) {
+          if (event.target.opened) {
             event.target.close();
-          }else{
+          } else {
             event.target.open();
           }
         },
 
-        _resultSecondActionHandler: function (event) {
+        _resultSecondActionHandler: function(event) {
           var index = event.model.index;
-          var selectedTag = this.splice('results',index,1);
-          this.push('selecteds',selectedTag[0]);
+          var selectedTag = this.splice('results', index, 1);
+          this.push('selecteds', selectedTag[0]);
         },
 
-        _selectedSecondActionHandler: function(event){
+        _selectedSecondActionHandler: function(event) {
           var index = event.model.index;
-          this.splice('selecteds',index,1);
+          this.splice('selecteds', index, 1);
         },
 
         _searchDecs: function() {
           this._setResults([]);
-          if (this.search != ''){
+          if (this.search !== '') {
             var params = {
               'search': this.search
             };
@@ -162,8 +161,6 @@
             this.searching = true;
             decsAjax.params = params;
             decsAjax.generateRequest();
-            // var searchButton = this.$['spinner'];
-            // searchButton.active = true;
           }
         },
 
@@ -172,13 +169,11 @@
           var results = decsAjax.lastResponse.result;
           this._setResults(results);
           this.searching = false;
-          // var searchButton = this.$['spinner'];
-          // searchButton.active = false;
         },
 
-        _isEmpty: function (results, searching){
-          if (!searching && results){
-            return results.length == 0;
+        _isEmpty: function(results, searching) {
+          if (!searching && results) {
+            return results.length === 0;
           }
           return false;
         },
@@ -192,7 +187,7 @@
           return JSON.parse(JSON.stringify(tags));
         },
 
-        reset: function(){
+        reset: function() {
           this.search = null;
           this.selecteds = [];
           this._setResults(undefined);
@@ -206,7 +201,6 @@
           };
           return tag;
         },
-
 
       });
     })();

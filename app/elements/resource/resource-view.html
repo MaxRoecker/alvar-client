@@ -34,18 +34,21 @@
         margin: 5rem auto;
       }
 
-      #header{
+      #header {
         display: flex;
         align-items: center;
       }
-      #header__heading{
+
+      #header__heading {
         flex-grow: 1;
         padding-left: 1rem;
       }
-      #header__heading h2{
+
+      #header__heading h2 {
         color: var(--default-primary-color);
         margin: 0;
       }
+
     </style>
     <paper-header-panel>
       <paper-toolbar>
@@ -66,7 +69,9 @@
             <file-type-icon type="[[resource.archive.type]]"></file-type-icon>
             <div id="header__heading">
               <h2 class="paper-font-title">[[resource.name]]</h2>
-              <span class='paper-font-body1 label'><span>[[resource.archive.size]]</span></span>
+              <span class='paper-font-body1 label'>
+                <span>[[resource.archive.size]]</span>
+              </span>
             </div>
           </div>
 
@@ -98,8 +103,10 @@
       <<paper-toast text="O arquivo está sendo processado." duration="10000" opened="[[loading]]" auto-fit-on-attach></paper-toast>
     </paper-header-panel>
 
-    <iron-ajax id='ajax-resource' method='GET' handle-as='json' content-type='application/json' on-response='_handleResourceResponse' on-error='_handleResourceError'></iron-ajax>
-    <iron-ajax id='ajax-archive' method='GET' handle-as='json' content-type='application/json' on-response='_handleArchiveResponse' on-error='_handleArchiveError'></iron-ajax>
+    <iron-ajax id='ajax-resource' method='GET' handle-as='json' content-type='application/json' on-response='_handleResourceResponse'
+    on-error='_handleResourceError'></iron-ajax>
+    <iron-ajax id='ajax-archive' method='GET' handle-as='json' content-type='application/json' on-response='_handleArchiveResponse'
+    on-error='_handleArchiveError'></iron-ajax>
 
   </template>
   <script src="../../bower_components/moment/min/moment.min.js" charset="utf-8"></script>
@@ -116,12 +123,14 @@
       if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define([], factory);
-      } else if (typeof exports === 'object') {
+      }
+      else if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
         module.exports = factory();
-      } else {
+      }
+      else {
         // Browser globals (root is window)
         root.download = factory();
       }
@@ -237,12 +246,14 @@
 
         if (self.URL) { // simple fast and modern way using Blob and URL:
           saver(self.URL.createObjectURL(blob), true);
-        } else {
+        }
+        else {
           // handle non-Blob()+non-URL browsers:
           if (typeof blob === 'string' || blob.constructor === z) {
             try {
               return saver('data:' + m + ';base64,' + self.btoa(blob));
-            } catch (y) {
+            }
+            catch (y) {
               return saver('data:' + m + ',' + encodeURIComponent(blob));
             }
           }
@@ -287,7 +298,7 @@
               'include': ['tags', {
                 'relation': 'archive',
                 'scope': {
-                  'fields': ['name', 'size', 'type','id']
+                  'fields': ['name', 'size', 'type', 'id']
                 }
               }]
             })
@@ -336,7 +347,8 @@
 
         download: function() {
           var ajaxArchive = this.$['ajax-archive'];
-          ajaxArchive.url = 'http://isingular.com.br:3000/api/Archives/' + this.resource.archive.id;
+          ajaxArchive.url = 'http://isingular.com.br:3000/api/Archives/' + this.resource.archive
+            .id;
           this._setLoading(true);
           ajaxArchive.generateRequest();
           /*
@@ -373,27 +385,28 @@
           this.fire('menu');
         },
 
-        _isEmpty: function (tags) {
-          return (tags && tags.length === 0)? true : false;
+        _isEmpty: function(tags) {
+          return (tags && tags.length === 0) ? true : false;
         },
 
-        _fireBack: function(){
+        _fireBack: function() {
           this.fire('back');
         },
 
         _formatTags: function(array) {
-          if(array){
+          if (array) {
             return array.map(
                 function(item) {
                   return item.name + ', ' + item.synonyms.join(', ');
                 })
               .join(', ');
-          } else {
+          }
+          else {
             return '';
           }
         },
 
-        _formatDate: function(dateString){
+        _formatDate: function(dateString) {
           var date = moment(dateString);
           return 'Atualizado há ' + moment(date).fromNow();
         }
@@ -402,5 +415,6 @@
 
       });
     })();
+
   </script>
 </dom-module>

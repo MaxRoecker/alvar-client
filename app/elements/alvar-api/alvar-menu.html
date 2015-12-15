@@ -13,20 +13,22 @@
         }
       }
 
-      paper-menu{
+      paper-menu {
         padding-bottom: 0;
       }
 
-      paper-menu a{
+      paper-menu a {
         color: var(--secondary-text-color);
         text-decoration: none;
         font-weight: inherit;
         display: block;
       }
+
       #menu-login-item {
         cursor: pointer;
         color: var(--secondary-text-color);
       }
+
     </style>
 
     <alvar-authentication id="authentication"></alvar-authentication>
@@ -43,21 +45,21 @@
       <a data-route="resource-create" href="/resource/create" hidden$="[[!authenticated]]">
         <paper-icon-item data-route="resource-create">
           <iron-icon icon="add" item-icon></iron-icon>
-            Novo Recurso
+          Novo Recurso
         </paper-icon-item>
       </a>
 
       <a data-route="no-result-queries-list" href="/no-result-queries/list" hidden$="[[!authenticated]]">
         <paper-icon-item data-route="no-result-queries-list">
           <iron-icon icon="highlight-off" item-icon></iron-icon>
-            Pesquisas sem resultado
+          Pesquisas sem resultado
         </paper-icon-item>
       </a>
     </paper-menu>
 
     <paper-icon-item id="menu-login-item" hidden$="[[authenticated]]" on-click="_fireLogin">
       <iron-icon icon="lock" item-icon></iron-icon>
-        Entrar
+      Entrar
     </paper-icon-item>
 
   </template>
@@ -83,14 +85,15 @@
       //   }
       // },
 
-      _ironSelectHandler: function(){
+      _ironSelectHandler: function() {
         this.fire('menu-select');
       },
 
-      _fireLogin: function(){
+      _fireLogin: function() {
         this.fire('login');
       },
 
     });
+
   </script>
 </dom-module>

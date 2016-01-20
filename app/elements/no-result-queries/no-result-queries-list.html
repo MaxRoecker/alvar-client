@@ -81,14 +81,17 @@
       <paper-toolbar>
         <paper-icon-button icon="menu" on-click="_fireMenu" paper-drawer-toggle></paper-icon-button>
         <span class="paper-font-title flex-1">
-          <paper-input value="{{query}}" label="" placeholder="Procurar" type="text" no-label-float></paper-input>
+          <paper-input value="{{query}}"
+                       placeholder="Procurar"
+                       type="text"
+                       no-label-float
+                       on-keypress="_handleKeyPress"></paper-input>
         </span>
-        <paper-icon-button icon="search" on-click="search"></paper-icon-button>
         <paper-icon-button icon="refresh" disabled$="[[loading]]" on-click="refresh"></paper-icon-button>
       </paper-toolbar>
       <div>
         <paper-material>
-          <paper-datatable data="{{noResultQueries}}">
+          <paper-datatable id="dataTable" data="{{[]}}">
             <paper-datatable-column header="Termo" property="search" sortable></paper-datatable-column>
             <paper-datatable-column header="Quantidade" property="counter" sortable></paper-datatable-column>
             <paper-datatable-column header="Última Pesquisa" property="lastUpdateBeautify" sortable></paper-datatable-column>
@@ -125,6 +128,10 @@
             }
           },
         },
+        
+        observers: [
+          '_observeNoResultQueries( noResultQueries.*, query )'
+        ],
 
         refresh: function() {
           var ajax = this.$['ajax'];
@@ -139,6 +146,12 @@
 
           this._setLoading(true);
           ajax.generateRequest();
+        },
+        
+        _observeNoResultQueries: function ( changeRecord, query ) {
+          this.$.dataTable.data = changeRecord.base.filter(function ( item ) {
+            return item.search.indexOf( query ) !== -1;
+          });
         },
 
         _handleNoReultQueriesResponse: function() {
@@ -155,7 +168,14 @@
         _formatDate: function(dateString) {
           var date = moment(dateString);
           return moment(date).format('L');
-        }
+        },
+        
+        _handleKeyPress: function ( event ) {
+          var key = event.keyCode || event.charCode || event.which;
+          if ( key === 13 ) {
+            
+          }
+        },
 
       });
     })();

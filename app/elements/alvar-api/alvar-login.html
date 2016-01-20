@@ -54,12 +54,12 @@
         <form is="iron-form" id="form" method="post" action="/">
           <paper-input-container id="form-container-email">
             <label>Email</label>
-            <input is="iron-input" id="form-email" type="email" name="email" required/>
+            <input is="iron-input" id="form-email" type="email" name="email" required on-keypress="_handleKeyPress"/>
             <paper-input-error>Informe um e-mail válido</paper-input-error>
           </paper-input-container>
           <paper-input-container>
             <label>Senha</label>
-            <input is="iron-input" id="form-password" type="password" name="password" required/>
+            <input is="iron-input" id="form-password" type="password" name="password" required on-keypress="_handleKeyPress"/>
             <paper-input-error>Informe a senha</paper-input-error>
           </paper-input-container>
         </form>
@@ -116,12 +116,13 @@
       },
 
       _loginHandlerClick: function() {
-        this._setLoging(true);
-        var inputEmail = this.$['form-email'];
-        var inputPassword = this.$['form-password'];
-        var validation = inputEmail.validate() && inputPassword.validate();
-        if (validation) {
-          this.login(null, inputEmail.value, inputPassword.value);
+        var inputEmail = this.$[ 'form-email' ],
+            inputPassword = this.$[ 'form-password' ],
+            inputEmailValidation = inputEmail.validate(),
+            inputPasswordValidation = inputPassword.validate();
+        if ( inputEmailValidation && inputPasswordValidation ) {
+          this._setLoging( true );
+          this.login( null, inputEmail.value, inputPassword.value );
         }
       },
 
@@ -144,13 +145,19 @@
       },
 
       _handleErrorResponse: function() {
-        console.error(this.$.ajax.lastError);
         this._setLoging(false);
         var inputPassword = this.$['form-password'];
         inputPassword.bindValue = '';
         document.getElementById('loginErrorMessage').innerHTML =
-          'Login e/ou senha inválido(s)!';
+          'Login ou senha inválido(s)!';
       },
+      
+      _handleKeyPress: function (event) {
+        var key = event.keyCode || event.charCode || event.which;
+        if ( key === 13 ) {
+          this._loginHandlerClick();
+        }
+      }
 
     });
 

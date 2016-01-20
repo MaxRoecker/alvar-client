@@ -48,6 +48,12 @@
         color: var(--default-primary-color);
         margin: 0;
       }
+      
+      #tryDownload {
+        --paper-button: {
+          color: #FFC107;
+        }
+      }
 
     </style>
     <paper-header-panel>
@@ -100,7 +106,10 @@
         </paper-material>
       </div>
 
-      <<paper-toast text="O arquivo está sendo processado." duration="10000" opened="[[loading]]" auto-fit-on-attach></paper-toast>
+      <paper-toast text="O arquivo está sendo processado." duration="10000" opened="[[loading]]"></paper-toast>
+      <paper-toast id="paperToastError" text="Houve um erro no download do arquivo" duration="Infinity">
+        <paper-button id="tryDownload" on-click="_handleTryDownloadClick">Tentar novamente</paper-button>
+      </paper-toast>
     </paper-header-panel>
 
     <iron-ajax id='ajax-resource' method='GET' handle-as='json' content-type='application/json' on-response='_handleResourceResponse'
@@ -287,6 +296,11 @@
           resource: {
             type: Object,
             notify: true,
+          },
+          
+          _errorCounter: {
+            type: Number,
+            value: 0,
           }
         },
 
@@ -304,6 +318,7 @@
             })
           };
           this._setLoading(true);
+          this._errorCounter = 0;
           ajaxResource.generateRequest();
         },
 
@@ -337,26 +352,31 @@
           var archive = ajaxArchive.lastResponse;
           var b64Data = archive.payload.split(',')[1];
           var blob = this._b64toBlob(b64Data, archive.type);
-          //var blobUrl = URL.createObjectURL(blob);
           download(blob, this.resource.name, archive.type);
         },
 
         _handleArchiveError: function() {
-          //TODO Check error
+          if ( this._errorCounter++ < 1 ) {
+            this.async(function () {
+              this.download();
+            },5000);
+          } else {
+            this._setLoading(false);
+            this.$.paperToastError.open();
+          }
+        },
+        
+        _handleTryDownloadClick: function () {
+          this.$.paperToastError.close();
+          this._errorCounter = 0;
+          this.download();
         },
 
         download: function() {
           var ajaxArchive = this.$['ajax-archive'];
-          ajaxArchive.url = 'http://isingular.com.br:3000/api/Archives/' + this.resource.archive
-            .id;
+          ajaxArchive.url = 'http://isingular.com.br:3000/api/Archives/' + this.resource.archive.id;
           this._setLoading(true);
           ajaxArchive.generateRequest();
-          /*
-          var b64Data = this.resource.archive.payload.split(',')[1];
-          var blob = this._b64toBlob(b64Data, this.resource.archive.type);
-          //var blobUrl = URL.createObjectURL(blob);
-          download(blob, this.resource.name, this.resource.archive.type);
-          */
         },
 
         _b64toBlob: function(b64Data, contentType, sliceSize) {
@@ -382,6 +402,7 @@
 
 
         _fireMenu: function() {
+          this.$.paperToastError.close();
           this.fire('menu');
         },
 
@@ -390,6 +411,7 @@
         },
 
         _fireBack: function() {
+          this.$.paperToastError.close();
           this.fire('back');
         },
 

@@ -1,6 +1,6 @@
 # Alvar [WebApp Client]
 
-> The web app for using the Educational Health Resources of Alvar. .
+> The web app for using the Educational Health Resources of Alvar.
 
 ## Supported by:
 

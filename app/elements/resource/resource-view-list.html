@@ -83,7 +83,11 @@
       <paper-toolbar>
         <paper-icon-button icon="menu" on-click="_fireMenu" paper-drawer-toggle></paper-icon-button>
         <span class="paper-font-title flex-1">
-          <paper-input value="{{query}}" label="" placeholder="Procurar" type="text" no-label-float></paper-input>
+          <paper-input value="{{query}}"
+                       placeholder="Procurar"
+                       type="text"
+                       no-label-float
+                       on-keypress="_handleSearchPaperInputKeypress"></paper-input>
         </span>
         <paper-icon-button icon="search" on-click="search"></paper-icon-button>
         <paper-icon-button icon="refresh" disabled$="[[loading]]" on-click="refresh"></paper-icon-button>
@@ -252,6 +256,13 @@
         _handleFavoriteClick: function(e) {
           console.log(e.model.item.id);
           e.srcElement.icon = 'favorite';
+        },
+        
+        _handleSearchPaperInputKeypress: function ( event ) {
+          var key = event.keyCode || event.charCode || event.which;
+          if ( key === 13 ) {
+            this.search();
+          }
         },
 
         _resourcesLenght: function() {

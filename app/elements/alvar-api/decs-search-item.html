@@ -12,8 +12,8 @@
       }
 
       paper-icon-item {
-        margin-left: -24px;
-        width: calc(100% + 16px);
+        margin-left: -1rem;
+        width: 100%;
       }
 
       paper-icon-item[selected] {
@@ -24,7 +24,7 @@
     </style>
 
     <paper-icon-item selected$="[[selected]]">
-      <paper-icon-button icon="[[_iconFirstAction(opened)]]" item-icon on-click="_fireFirstAction"></paper-icon-button>
+      <paper-icon-button icon="[[_iconFirstAction(selected)]]" item-icon on-click="_fireFirstAction"></paper-icon-button>
       <paper-item-body three-line on-click="_fireFirstAction">
         <div>[[name]]</div>
         <template is="dom-if" if=[[opened]]>
@@ -38,7 +38,7 @@
           </template>
         </template>
       </paper-item-body>
-      <paper-icon-button icon="[[_iconSecondAction(selected)]]" on-click="_fireSecondAction"></paper-icon-button>
+      <paper-icon-button icon="[[_iconSecondAction(opened)]]" on-click="_fireSecondAction"></paper-icon-button>
     </paper-icon-item>
 
   </template>
@@ -77,11 +77,11 @@
       },
 
       _iconFirstAction: function(opened) {
-        return (opened) ? 'expand-less' : 'expand-more';
+        return (opened) ? 'delete' : 'add';
       },
 
       _iconSecondAction: function(selected) {
-        return (selected) ? 'delete' : 'add';
+        return (selected) ? 'expand-less' : 'expand-more';
       },
 
       _isEmpty: function() {

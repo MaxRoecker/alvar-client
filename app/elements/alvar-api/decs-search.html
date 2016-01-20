@@ -73,7 +73,7 @@
       <div id="input">
         <paper-input-container always-float-label>
           <label>Pesquisar por descritores</label>
-          <input is="iron-input" bind-value="{{search}}" />
+          <input is="iron-input" bind-value="{{search}}" on-keypress="_handleKeyPress" />
         </paper-input-container>
       </div>
       <div>
@@ -83,15 +83,17 @@
 
     <div>
       <template is="dom-repeat" items="[[selecteds]]">
-        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]" selected on-firstaction="_firstActionHandler"
-        on-secondaction="_selectedSecondActionHandler"></decs-search-item>
+        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]" selected
+                          on-firstaction="_selectedFirstActionHandler"
+                          on-secondaction="_secondActionHandler"></decs-search-item>
       </template>
     </div>
 
     <div>
       <template is="dom-repeat" items="[[results]]">
-        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]" on-firstaction="_firstActionHandler"
-        on-secondaction="_resultSecondActionHandler"></decs-search-item>
+        <decs-search-item name="[[item.terms.pt]]" synonyms="[[item.synonyms]]"
+                          on-firstaction="_resultFirstActionHandler"
+                          on-secondaction="_secondActionHandler"></decs-search-item>
       </template>
     </div>
 
@@ -132,23 +134,23 @@
           }
         },
 
-        _firstActionHandler: function(event) {
+        _selectedFirstActionHandler: function(event) {
+          var index = event.model.index;
+          this.splice('selecteds', index, 1);
+        },
+        
+        _resultFirstActionHandler: function ( event ) {
+          var index = event.model.index;
+          var selectedTag = this.splice('results', index, 1);
+          this.push('selecteds', selectedTag[0]);
+        },
+        
+        _secondActionHandler: function(event) {
           if (event.target.opened) {
             event.target.close();
           } else {
             event.target.open();
           }
-        },
-
-        _resultSecondActionHandler: function(event) {
-          var index = event.model.index;
-          var selectedTag = this.splice('results', index, 1);
-          this.push('selecteds', selectedTag[0]);
-        },
-
-        _selectedSecondActionHandler: function(event) {
-          var index = event.model.index;
-          this.splice('selecteds', index, 1);
         },
 
         _searchDecs: function() {
@@ -169,6 +171,13 @@
           var results = decsAjax.lastResponse.result;
           this._setResults(results);
           this.searching = false;
+        },
+        
+        _handleKeyPress: function (event) {
+          var key = event.keyCode || event.charCode || event.which;
+          if ( key === 13 ) {
+            this.$['search-button'].click();
+          }
         },
 
         _isEmpty: function(results, searching) {

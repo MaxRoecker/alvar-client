@@ -47,7 +47,7 @@
 
     </paper-header-panel>
 
-    <iron-ajax id="ajax-resource" url="http://isingular.com.br:3000/api/Resources" method="POST" handle-as="json"
+    <iron-ajax id="ajax-resource" url="http://localhost:3000/api/Resources" method="POST" handle-as="json"
     content-type="application/json" on-response="_handleResourceResponse" on-error="_handleAjaxError"></iron-ajax>
     <iron-ajax id="ajax-archive" url="" method="POST" handle-as="json" content-type="application/json" on-response="_handleArchiveResponse"
     on-error="_handleAjaxError"></iron-ajax>
@@ -129,7 +129,7 @@
           };
 
           var archive = this.$['resource-form'].serializeArchive();
-          ajaxArchive.url = 'http://isingular.com.br:3000/api/Resources/' + resource.id +
+          ajaxArchive.url = 'http://localhost:3000/api/Resources/' + resource.id +
             '/archive';
           ajaxArchive.body = archive;
           ajaxArchive.generateRequest();
@@ -148,7 +148,7 @@
 
           var tags = this.$['resource-form'].serializeTags();
           console.log(tags);
-          ajaxTag.url = 'http://isingular.com.br:3000/api/Resources/' + this.resource.id +
+          ajaxTag.url = 'http://localhost:3000/api/Resources/' + this.resource.id +
             '/tags';
           ajaxTag.body = tags;
           ajaxTag.generateRequest();

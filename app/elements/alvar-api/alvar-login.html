@@ -43,7 +43,7 @@
 
     </style>
 
-    <iron-ajax id="ajax" url="http://isingular.com.br:3000/api/Users/login" handle-as="json" content-type="application/json"
+    <iron-ajax id="ajax" url="http://localhost:3000/api/Users/login" handle-as="json" content-type="application/json"
     method="POST" on-response="_handleLoginResponse" on-error="_handleErrorResponse"></iron-ajax>
 
     <iron-localstorage id="storage" name="alvar-authorization"></iron-localstorage>
@@ -151,7 +151,7 @@
         document.getElementById('loginErrorMessage').innerHTML =
           'Login ou senha inválido(s)!';
       },
-      
+
       _handleKeyPress: function (event) {
         var key = event.keyCode || event.charCode || event.which;
         if ( key === 13 ) {

@@ -67,7 +67,7 @@
 
     </style>
 
-    <iron-ajax id="decs-ajax" method="get" url="http://isingular.com.br:3000/api/Resources/searchDecs" handle-as="json"
+    <iron-ajax id="decs-ajax" method="get" url="http://localhost:3000/api/Resources/searchDecs" handle-as="json"
     on-response="_handleDecsResponse"></iron-ajax>
     <div class="row">
       <div id="input">
@@ -138,13 +138,13 @@
           var index = event.model.index;
           this.splice('selecteds', index, 1);
         },
-        
+
         _resultFirstActionHandler: function ( event ) {
           var index = event.model.index;
           var selectedTag = this.splice('results', index, 1);
           this.push('selecteds', selectedTag[0]);
         },
-        
+
         _secondActionHandler: function(event) {
           if (event.target.opened) {
             event.target.close();
@@ -172,7 +172,7 @@
           this._setResults(results);
           this.searching = false;
         },
-        
+
         _handleKeyPress: function (event) {
           var key = event.keyCode || event.charCode || event.which;
           if ( key === 13 ) {

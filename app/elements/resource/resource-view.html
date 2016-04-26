@@ -48,7 +48,7 @@
         color: var(--default-primary-color);
         margin: 0;
       }
-      
+
       #tryDownload {
         --paper-button: {
           color: #FFC107;
@@ -297,7 +297,7 @@
             type: Object,
             notify: true,
           },
-          
+
           _errorCounter: {
             type: Number,
             value: 0,
@@ -306,7 +306,7 @@
 
         _resourceIdObserver: function(newValue) {
           var ajaxResource = this.$['ajax-resource'];
-          ajaxResource.url = 'http://isingular.com.br:3000/api/Resources/' + newValue;
+          ajaxResource.url = 'http://localhost:3000/api/Resources/' + newValue;
           ajaxResource.params = {
             'filter': JSON.stringify({
               'include': ['tags', {
@@ -365,7 +365,7 @@
             this.$.paperToastError.open();
           }
         },
-        
+
         _handleTryDownloadClick: function () {
           this.$.paperToastError.close();
           this._errorCounter = 0;
@@ -374,7 +374,7 @@
 
         download: function() {
           var ajaxArchive = this.$['ajax-archive'];
-          ajaxArchive.url = 'http://isingular.com.br:3000/api/Archives/' + this.resource.archive.id;
+          ajaxArchive.url = 'http://localhost:3000/api/Archives/' + this.resource.archive.id;
           this._setLoading(true);
           ajaxArchive.generateRequest();
         },
